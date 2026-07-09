@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html , body{
+    height: 100%;
+    width: 100%;
+}
+
+.transition{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999999999;
+    pointer-events: none;
+}
+
+.transition-row {
+    flex: 1;
+    display: flex;
+}
+
+.transition-row.row-1 .block{
+    transform-origin: top;
+}
+
+.transition-row.row-2 .block{
+    transform-origin: bottom;
+}
+
+.block{
+    flex: 1;
+    background-color: #6B6E70;
+    /* Default hidden so a missed reveal can never leave the overlay covering
+       the page. cover()/reveal() still drive the same animation. */
+    transform: scaleY(0);
+    visibility: hidden;
+    will-change: transform;
+}
+
+
+
+@media (max-width:768px) {
+    .block{
+        background-color: #6B6E70;
+    }
+}
