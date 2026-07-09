@@ -17,6 +17,9 @@ html .minicircle {
   mix-blend-mode: difference;
   pointer-events: none;
   will-change: transform;
+  /* Smooths the dot between mousemove events (same feel as the home page).
+     Without it, non-home pages snapped per event and felt jerky/"throttly". */
+  transition: transform 0.2s ease-out;
 }
 /* No custom cursor on touch devices. */
 @media (hover: none), (pointer: coarse) {

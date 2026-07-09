@@ -88,16 +88,15 @@ export default function Home({ animate = true }) {
           '-=0.7'
         );
 
-      // Skill-card image follower. clientY is viewport-relative, and the top of
-      // each `.elem` only changes on scroll/resize, so cache it (recomputed on
-      // enter) instead of calling getBoundingClientRect on every mousemove — no
-      // per-frame layout reads => smoother 60fps.
+      // Skill-card image follower. Read the element's top per move — it changes
+      // as the page scrolls (Lenis) while hovering, so a cached value would make
+      // the image drift up/down. A single getBoundingClientRect read on a
+      // (browser-throttled) mousemove is cheap.
       document.querySelectorAll('.elem').forEach((elem) => {
         const img = elem.querySelector('img');
         let rotate = 0;
-        let top = 0;
         const setPos = (e) => {
-          const diff = e.clientY - top;
+          const diff = e.clientY - elem.getBoundingClientRect().top;
           const diffrot = e.clientX - rotate;
           rotate = e.clientX;
           gsap.to(img, {
@@ -111,7 +110,6 @@ export default function Home({ animate = true }) {
           });
         };
         elem.addEventListener('mouseenter', (e) => {
-          top = elem.getBoundingClientRect().top;
           gsap.set(img, { zIndex: 99999, display: 'block' });
           setPos(e);
         });

@@ -38,8 +38,8 @@ export function useSidebarMenu() {
       tl.timeScale(1).play();
     };
     const close = () => {
-      // Reverse noticeably faster so closing feels crisp, then re-enable scroll.
-      tl.timeScale(1.8).reverse();
+      // Reverse a bit faster than open (crisp but not abrupt), then re-enable scroll.
+      tl.timeScale(1.35).reverse();
       tl.eventCallback('onReverseComplete', () => {
         document.body.style.overflow = '';
       });
