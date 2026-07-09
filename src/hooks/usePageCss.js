@@ -4,6 +4,7 @@ const MAP = {
   '/': '/styles.css',
   '/work': '/work.css',
   '/playground': '/playground.css',
+  '/stack': '/stack.css',
 }
 
 // Each original page loaded its own page-specific CSS. Since an SPA shares one

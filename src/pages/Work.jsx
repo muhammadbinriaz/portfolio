@@ -10,6 +10,7 @@ const sidebarItems = [
   { label: 'HOME', href: '/', cls: 'should' },
   { label: 'work', href: '#', cls: '' },
   { label: 'Playground', href: '/playground', cls: 'should' },
+  { label: 'Stack', href: '/stack', cls: 'should' },
   {
     label: 'Contact',
     href: 'mailto:muhammadbinriaz675@gmail.com',
@@ -78,6 +79,9 @@ export default function Work() {
               </a>
               <a className="should yes" href="/playground">
                 PLAYGROUND
+              </a>
+              <a className="should yes" href="/stack">
+                STACK
               </a>
               <a className="yes" href="mailto:muhammadbinriaz675@gmail.com">
                 CONTACT

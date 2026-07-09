@@ -11,6 +11,7 @@ const sidebarItems = [
   { label: "HOME", href: "#", cls: "" },
   { label: "work", href: "/work", cls: "nice should" },
   { label: "Playground", href: "/playground", cls: "nice should" },
+  { label: "Stack", href: "/stack", cls: "nice should" },
   {
     label: "Contact",
     href: "mailto:muhammadbinriaz675@gmail.com",
@@ -147,6 +148,9 @@ export default function Home({ animate = true }) {
               </a>
               <a className="nice should yes" href="/playground">
                 PLAYGROUND
+              </a>
+              <a className="nice should yes" href="/stack">
+                STACK
               </a>
               <a
                 className="nice yes"

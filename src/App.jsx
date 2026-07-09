@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import Playground from './pages/Playground'
+import Stack from './pages/Stack'
 import Loader from './components/Loader'
 import TransitionOverlay from './components/TransitionOverlay'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/" element={<Home animate={loaded} />} />
             <Route path="/work" element={<Work />} />
             <Route path="/playground" element={<Playground />} />
+            <Route path="/stack" element={<Stack />} />
           </Routes>
         )}
       </ErrorBoundary>
