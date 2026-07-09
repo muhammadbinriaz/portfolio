@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from '../lib/animations';
-import Cursor from '../components/Cursor';
 import Sidebar from '../components/Sidebar';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
@@ -61,7 +60,6 @@ export default function Work() {
 
   return (
     <>
-      <Cursor />
       <div className="main" ref={mainRef}>
         <Sidebar lowerClass="lower1" items={sidebarItems} />
 
@@ -127,7 +125,7 @@ export default function Work() {
               vision to life.
             </p>
             <a
-              className="yes"
+              className="talk yes"
               href="mailto:muhammadbinriaz675@gmail.com"
             >
               let's Talk

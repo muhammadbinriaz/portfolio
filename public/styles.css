@@ -1078,6 +1078,15 @@ body {
   font-size: 20vw;
   font-family: "General Sans";
 }
+/* On small screens, center the fake-number loader and make it a bit larger. */
+@media (min-width: 1px) and (max-width: 640px) {
+  .counter {
+    justify-content: center;
+    align-items: center;
+    font-size: 34vw;
+    padding: 0;
+  }
+}
 
 .nav,
 .herofooter,

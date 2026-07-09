@@ -7,6 +7,7 @@ import Stack from './pages/Stack'
 import Loader from './components/Loader'
 import TransitionOverlay from './components/TransitionOverlay'
 import ErrorBoundary from './components/ErrorBoundary'
+import Cursor from './components/Cursor'
 import { cover, reveal } from './lib/transition'
 import { usePageCss } from './hooks/usePageCss'
 
@@ -46,6 +47,9 @@ export default function App() {
   return (
     <>
       <TransitionOverlay />
+      {/* One cursor for the whole app, mounted once and kept across route
+          changes so it never remounts (and "jumps" to 0,0) when navigating. */}
+      <Cursor />
       {cssReady && !loaded && <Loader onDone={() => setLoaded(true)} />}
       <ErrorBoundary>
         {cssReady && (

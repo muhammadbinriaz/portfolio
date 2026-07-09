@@ -223,6 +223,53 @@ body {
   letter-spacing: 0.7px;
 }
 
+/* ABOUT — same layout / margins as Home & Work so spacing with the footer
+   stays consistent across every page. */
+.stack .about {
+  color: #fff;
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+  width: 100%;
+  padding: 11vw 15vw;
+  padding-left: 35vw;
+}
+.stack .about img {
+  width: 225px;
+  border-radius: 50%;
+}
+.stack .textabout {
+  width: 30rem;
+}
+.stack .textabout h5 {
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 10px;
+}
+.stack .textabout p {
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: 500;
+}
+.stack .textabout a {
+  padding: 7px 22px;
+  border: 1px solid #fff;
+  border-radius: 100px;
+  color: #fff;
+  text-decoration: none;
+}
+.stack .talk {
+  transition: all ease 0.6s;
+}
+.stack .talk:hover {
+  color: #000;
+  background-color: #fff;
+}
+.stack .talk:hover::after {
+  width: 0;
+}
+
 /* TOUCH DEVICES */
 @media (hover: none), (pointer: coarse) {
   .tech .tech-ico {
@@ -497,5 +544,62 @@ body {
   }
   .lower h3 {
     font-weight: bold;
+  }
+}
+
+/* ABOUT — responsive, matching Home / Work. */
+@media (max-width: 1024px) {
+  .stack .about {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0px;
+    width: 100%;
+    padding: 0 12vw;
+    padding-right: 10vw;
+    padding-left: 10vw;
+    margin-top: 15vw;
+    margin-bottom: 15vw;
+  }
+  .stack .about img {
+    width: 220px;
+    margin-bottom: 5vw;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .stack .textabout {
+    padding: 0vw 4vw;
+    padding-right: 0;
+    width: 100%;
+    display: block;
+  }
+  .stack .textabout p {
+    font-size: 16px;
+  }
+}
+@media (max-width: 640px) {
+  .stack .about {
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+    width: 100%;
+    padding: 5vw 0vw;
+    padding-left: 0;
+    margin-top: 30vw;
+  }
+  .stack .about img {
+    width: 60vw;
+    align-self: stretch;
+    margin-bottom: 5vw;
+    border-radius: 50%;
+    margin-left: 5vw;
+  }
+  .stack .textabout {
+    padding: 3vw 5vw;
+    width: 100%;
+    display: block;
+  }
+  .stack .textabout p {
+    font-size: 4.2vw;
+    line-height: 1.7;
   }
 }

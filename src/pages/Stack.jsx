@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '../lib/animations';
-import Cursor from '../components/Cursor';
 import Sidebar from '../components/Sidebar';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
@@ -188,7 +187,6 @@ export default function Stack() {
 
   return (
     <>
-      <Cursor />
       <img className="tech-preview" ref={previewRef} alt="" aria-hidden="true" />
       <div className="stack" ref={wrapRef}>
         <Sidebar lowerClass="lower" items={sidebarItems} />
@@ -248,6 +246,24 @@ export default function Stack() {
             </section>
           ))}
         </main>
+
+        <div className="about">
+          <img src="/assets/best.png" alt="" />
+          <div className="textabout">
+            <h5>(about me)</h5>
+            <p>
+              From intelligent agents to polished product interfaces — I design
+              and build AI-powered web experiences with clean architecture and
+              high-end motion. Let's create something that feels effortless.
+            </p>
+            <a
+              className="talk yes"
+              href="mailto:muhammadbinriaz675@gmail.com"
+            >
+              let's Talk
+            </a>
+          </div>
+        </div>
 
         <div className="footer">
           <div className="footerleft">

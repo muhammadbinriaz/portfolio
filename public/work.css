@@ -194,6 +194,11 @@ img {
   color: #000;
   background-color: #fff;
 }
+/* Suppress the shared .yes underline on hover so the pill fills white cleanly
+   (matches the home page "let's Talk" button). */
+.talk:hover::after {
+  width: 0;
+}
 /* responsiveness */
 
 @media (min-width: 1px) and (max-width: 639px) {

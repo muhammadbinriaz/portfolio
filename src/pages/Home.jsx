@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { gsap } from "../lib/animations";
-import Cursor from "../components/Cursor";
 import Sidebar from "../components/Sidebar";
 import { useSidebarMenu } from "../hooks/useSidebarMenu";
 import { useLiveTime } from "../hooks/useLiveTime";
@@ -126,7 +125,6 @@ export default function Home({ animate = true }) {
 
   return (
     <>
-      <Cursor />
       <div className="main" ref={mainRef}>
         <Sidebar lowerClass="lower" items={sidebarItems} />
 
@@ -205,12 +203,12 @@ export default function Home({ animate = true }) {
 
         <div className="second">
           <div className="elem">
-            <img src="/assets/htmlBest.png" alt="" />
+            <img src="/assets/tech/openai.svg" alt="" />
             <h1>AI DEV.</h1>
             <h5>2022</h5>
           </div>
           <div className="elem">
-            <img src="/assets/css-3.png" alt="" />
+            <img src="/assets/python.webp" alt="" />
             <h1>PYTHON Dev.</h1>
             <h5>2022</h5>
           </div>
@@ -220,12 +218,12 @@ export default function Home({ animate = true }) {
             <h5>2022</h5>
           </div>
           <div className="elem elemlast">
-            <img src="/assets/rct1.png" alt="" />
+            <img src="/assets/tech/agentic.svg" alt="" />
             <h1>AGENTIC AI</h1>
             <h5>2022</h5>
           </div>
           <div className="elem elemlast">
-            <img src="/assets/python.webp" alt="" />
+            <img src="/assets/rct1.png" alt="" />
             <h1>Full STack Dev.</h1>
             <h5>2022</h5>
           </div>

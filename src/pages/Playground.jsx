@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '../lib/animations';
-import Cursor from '../components/Cursor';
 import Sidebar from '../components/Sidebar';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
@@ -86,7 +85,6 @@ export default function Playground() {
 
   return (
     <>
-      <Cursor />
       <div ref={wrapRef}>
         <Sidebar lowerClass="lower" items={sidebarItems} />
 
