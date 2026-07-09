@@ -46,6 +46,13 @@ img {
   filter: blur(3px);
   cursor: pointer;
 }
+/* Reserve the grid slot BEFORE the image loads so text/layout never jumps, and
+   show a dark skeleton instead of empty space while it streams in. */
+.grid-img-container .image {
+  aspect-ratio: 3 / 2;
+  height: auto;
+  background-color: #141414;
+}
 .myself {
   border-radius: 50%;
 }

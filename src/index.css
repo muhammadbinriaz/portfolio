@@ -1,0 +1,66 @@
+/* Global, bundled styles — guaranteed present before first paint.
+   Kept intentionally small; per-route look still comes from the page CSS. */
+
+/* ---- Unified custom cursor (identical on every page) -------------------- */
+/* `html .minicircle` beats the page-specific `.minicircle` rules so the dot is
+   always position:fixed (follows the viewport, never drifts while scrolling). */
+html .minicircle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 99999999;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  will-change: transform;
+}
+/* No custom cursor on touch devices. */
+@media (hover: none), (pointer: coarse) {
+  html .minicircle {
+    display: none;
+  }
+}
+
+/* ---- White hover underline for every nav / footer link ----------------- */
+.hover-underline,
+.yes {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+.hover-underline::after,
+.yes::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+.hover-underline:hover::after,
+.yes:hover::after {
+  width: 100%;
+}
+
+/* ---- Remove the throttly scrollbar app-wide; Lenis handles smoothness --- */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ---- Media: avoid drag ghosts + hint the compositor --------------------- */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { gsap, ScrollTrigger, LocomotiveScroll } from '../lib/animations';
+import { gsap } from '../lib/animations';
 import Cursor from '../components/Cursor';
 import Sidebar from '../components/Sidebar';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
+import { useSmoothScroll } from '../hooks/useSmoothScroll';
 
 const sidebarItems = [
   { label: 'HOME', href: '#', cls: '' },
@@ -20,159 +21,113 @@ const sidebarItems = [
 export default function Home({ animate = true }) {
   const mainRef = useRef(null);
   const location = useLocation();
-  useSidebarMenu('lower');
+  useSidebarMenu();
   useLiveTime();
+  useSmoothScroll(mainRef);
 
   useEffect(() => {
     // Wait until the loader is done (first load) so the hero reveal is actually
     // visible instead of playing behind the loader overlay.
     if (!gsap || !animate) return;
-    let locoScroll;
-    let onRefresh;
 
-    // Entrance + hover animations only need GSAP — run them first so the page
-    // is always visible even if the smooth-scroll setup below fails.
     const ctx = gsap.context(() => {
       // Pin the from-states explicitly (matches styles.css) so the reveal always
       // animates regardless of stylesheet timing.
       gsap.set('.boundingelem', { y: '100%', opacity: 0 });
       gsap.set('.boundingelemUp', { y: '-200%' });
       gsap.set(['.nav', '.chhotiheadings', '.herofooter'], { opacity: 0 });
+      gsap.set('.nav .home-link, .nav .come, .come2 a', { y: -20, opacity: 0 });
 
       const tl = gsap.timeline();
       tl.to('.nav', {
-        y: 10,
         opacity: 1,
-        duration: 1.2,
-        delay: -0.5,
-        ease: 'expo.inOut',
+        duration: 0.6,
+        ease: 'power2.out',
       })
-        .to('.boundingelem', {
-          y: 0,
-          opacity: 0.7,
-          ease: 'expo.inOut',
-          duration: 1.75,
-          delay: -1.15,
-          stagger: 0.1,
-        })
-        .to('.boundingelemUp', {
-          y: 0,
-          opacity: 1,
-          ease: 'expo.inOut',
-          duration: 1,
-          delay: -1,
-          stagger: 0.1,
-        })
-        .to('.chhotiheadings', {
-          opacity: 1,
-          duration: 0.75,
-          delay: -0.75,
-          ease: 'expo.inOut',
-        })
-        .to('.herofooter', {
-          opacity: 1,
-          duration: 1,
-          delay: -0.8,
-          ease: 'expo.inOut',
-        });
+        .to(
+          '.nav .home-link, .nav .come, .come2 a',
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.06,
+            ease: 'power3.out',
+          },
+          '-=0.3'
+        )
+        .to(
+          '.boundingelem',
+          {
+            y: 0,
+            opacity: 0.7,
+            ease: 'expo.out',
+            duration: 1.6,
+            stagger: 0.1,
+          },
+          '-=0.5'
+        )
+        .to(
+          '.boundingelemUp',
+          {
+            y: 0,
+            opacity: 1,
+            ease: 'expo.out',
+            duration: 1,
+            stagger: 0.1,
+          },
+          '-=1.35'
+        )
+        .to(
+          '.chhotiheadings',
+          { opacity: 1, duration: 0.75, ease: 'power2.out' },
+          '-=0.9'
+        )
+        .to(
+          '.herofooter',
+          { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' },
+          '-=0.7'
+        );
 
-      document.querySelectorAll('.elem').forEach(function (elem) {
+      // Skill-card image follower. clientY is viewport-relative, and the top of
+      // each `.elem` only changes on scroll/resize, so cache it (recomputed on
+      // enter) instead of calling getBoundingClientRect on every mousemove — no
+      // per-frame layout reads => smoother 60fps.
+      document.querySelectorAll('.elem').forEach((elem) => {
+        const img = elem.querySelector('img');
         let rotate = 0;
-        elem.addEventListener('mouseleave', function (dets) {
-          gsap.to(elem.querySelector('img'), {
-            opacity: 0,
-            ease: 'power3',
-            duration: 0.5,
-          });
-        });
-        elem.addEventListener('mouseover', function (dets) {
-          const diff = dets.clientY - elem.getBoundingClientRect().top;
-          const diffrot = dets.clientX - rotate;
-          rotate = dets.clientX;
-          gsap.to(elem.querySelector('img'), {
-            opacity: 1,
-            zIndex: 99999,
-            borderRadius: '20px',
-            display: 'block',
-            ease: 'power3',
-            top: diff,
-            left: dets.clientX,
-            rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),
-          });
-        });
-        elem.addEventListener('mousemove', function (dets) {
-          const diff = dets.clientY - elem.getBoundingClientRect().top;
-          const diffrot = dets.clientX - rotate;
-          rotate = dets.clientX;
-          gsap.to(elem.querySelector('img'), {
+        let top = 0;
+        const setPos = (e) => {
+          const diff = e.clientY - top;
+          const diffrot = e.clientX - rotate;
+          rotate = e.clientX;
+          gsap.to(img, {
             opacity: 1,
             borderRadius: '20px',
             ease: 'power3',
             top: diff,
-            left: dets.clientX,
+            left: e.clientX,
             rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),
+            overwrite: 'auto',
           });
+        };
+        elem.addEventListener('mouseenter', (e) => {
+          top = elem.getBoundingClientRect().top;
+          gsap.set(img, { zIndex: 99999, display: 'block' });
+          setPos(e);
+        });
+        elem.addEventListener('mousemove', setPos);
+        elem.addEventListener('mouseleave', () => {
+          gsap.to(img, { opacity: 0, ease: 'power3', duration: 0.5 });
         });
       });
     }, mainRef.current);
 
-    // Smooth scroll (Locomotive + ScrollTrigger proxy). Wrapped so any failure
-    // here can never blank the page.
-    try {
-      if (LocomotiveScroll && mainRef.current) {
-        const el = mainRef.current;
-        locoScroll = new LocomotiveScroll({ el, smooth: true });
-        locoScroll.on('scroll', ScrollTrigger.update);
-        ScrollTrigger.scrollerProxy(el, {
-          scrollTop(value) {
-            return arguments.length
-              ? locoScroll.scrollTo(value, 0, 0)
-              : locoScroll.scroll.instance.scroll.y;
-          },
-          getBoundingClientRect() {
-            return {
-              top: 0,
-              left: 0,
-              width: window.innerWidth,
-              height: window.innerHeight,
-            };
-          },
-          pinType: el.style.transform ? 'transform' : 'fixed',
-        });
-        // Keep a reference so we can REMOVE this listener on unmount — otherwise
-        // a later ScrollTrigger.refresh() (e.g. from the Playground page) would
-        // call update() on a destroyed Locomotive instance and throw.
-        onRefresh = () => locoScroll && locoScroll.update();
-        ScrollTrigger.addEventListener('refresh', onRefresh);
-        ScrollTrigger.refresh();
-      }
-    } catch (err) {
-      console.error('Locomotive setup failed:', err);
-    }
-
-    return () => {
-      try {
-        if (onRefresh) ScrollTrigger.removeEventListener('refresh', onRefresh);
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-        if (locoScroll) locoScroll.destroy();
-        // Locomotive tags <html> — make sure other routes can scroll natively.
-        document.documentElement.classList.remove(
-          'has-scroll-smooth',
-          'has-scroll-init',
-          'has-scroll-scrolling',
-          'has-scroll-dragging'
-        );
-        document.body.style.overflow = '';
-      } catch (e) {
-        /* noop */
-      }
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, [animate]);
 
   return (
     <>
-      <Cursor variant="mini" />
+      <Cursor />
       <div className="main" ref={mainRef}>
         <Sidebar lowerClass="lower" items={sidebarItems} />
 

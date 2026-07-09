@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { gsap, ScrollTrigger, Lenis } from '../lib/animations';
+import { gsap } from '../lib/animations';
 import Cursor from '../components/Cursor';
 import Sidebar from '../components/Sidebar';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
+import { useSmoothScroll } from '../hooks/useSmoothScroll';
 
 const sidebarItems = [
   { label: 'HOME', href: '/', cls: 'should' },
@@ -29,12 +30,12 @@ const gridItems = [
 
 export default function Work() {
   const mainRef = useRef(null);
-  useSidebarMenu('lower1');
+  useSidebarMenu();
   useLiveTime();
+  useSmoothScroll(mainRef);
 
   useEffect(() => {
     if (!gsap) return;
-    if (ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       gsap.from('.items', { opacity: 0, duration: 0.6, delay: 2 });
@@ -54,78 +55,12 @@ export default function Work() {
       });
     }, mainRef.current);
 
-    let lenis;
-    let rafId;
-    try {
-      if (Lenis) {
-        lenis = new Lenis();
-        function raf(time) {
-          lenis.raf(time);
-          rafId = requestAnimationFrame(raf);
-        }
-        rafId = requestAnimationFrame(raf);
-      }
-    } catch (e) {
-      console.error('Lenis failed', e);
-    }
-
-    const cursor = document.querySelector('.cursor');
-    const imgHandlers = [];
-    document.querySelectorAll('.image').forEach((image) => {
-      const enter = () => {
-        if (!cursor) return;
-        cursor.innerHTML = 'View More';
-        cursor.style.fontSize = '.3vw';
-        gsap.to(cursor, {
-          scale: 5,
-          backgroundColor: '#ffffff8a',
-          color: '#fff',
-          height: 32,
-          width: 32,
-        });
-      };
-      const leave = () => {
-        if (!cursor) return;
-        cursor.innerHTML = '';
-        gsap.to(cursor, {
-          scale: 1,
-          backgroundColor: '#fff',
-          height: 12,
-          width: 12,
-        });
-      };
-      image.addEventListener('mouseover', enter);
-      image.addEventListener('mouseleave', leave);
-      imgHandlers.push([image, enter, leave]);
-    });
-
-    const linkHandlers = [];
-    document.querySelectorAll('a').forEach((link) => {
-      const enter = () => cursor && gsap.to(cursor, { scale: 1.5, duration: 0.3 });
-      const leave = () => cursor && gsap.to(cursor, { scale: 1, duration: 0.3 });
-      link.addEventListener('mouseenter', enter);
-      link.addEventListener('mouseleave', leave);
-      linkHandlers.push([link, enter, leave]);
-    });
-
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (lenis) lenis.destroy();
-      imgHandlers.forEach(([el, en, lv]) => {
-        el.removeEventListener('mouseover', en);
-        el.removeEventListener('mouseleave', lv);
-      });
-      linkHandlers.forEach(([el, en, lv]) => {
-        el.removeEventListener('mouseenter', en);
-        el.removeEventListener('mouseleave', lv);
-      });
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <>
-      <Cursor variant="follow" />
+      <Cursor />
       <div className="main" ref={mainRef}>
         <Sidebar lowerClass="lower1" items={sidebarItems} />
 
@@ -159,7 +94,13 @@ export default function Work() {
                 <div className="grid-img-container" key={i}>
                   <div className="items">
                     <div className="overlay"></div>
-                    <img src={'/assets/' + it.img} className="image" alt="" />
+                    <img
+                      src={'/assets/' + it.img}
+                      className="image"
+                      alt={it.title}
+                      decoding="async"
+                      loading={i < 2 ? 'eager' : 'lazy'}
+                    />
                     <div className="bottom-line">
                       <h2>{it.title}</h2>
                       <h1>{it.year}</h1>

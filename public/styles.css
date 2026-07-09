@@ -25,7 +25,11 @@ body {
   width: 100%;
   background-color: #000;
 }
-html,
+/* NOTE: `html` must NOT clip overflow. With Locomotive gone the page scrolls
+   natively/with Lenis, and `overflow-x:hidden` on <html> forces overflow-y:auto
+   which (with height:100%) turns <html> into a capped scroll container so the
+   document can't grow — i.e. the page wouldn't scroll. Clip on body/.main only,
+   matching work.css / playground.css. */
 body,
 .main {
   overflow-x: hidden;
@@ -398,7 +402,6 @@ body {
   }
 }
 @media (min-width: 1px) and (max-width: 639px) {
-  html,
   body {
     width: 100vw;
     overflow-x: hidden;
@@ -655,7 +658,6 @@ body {
   }
 }
 @media (min-width: 639px) and (max-width: 1024px) {
-  html,
   body {
     width: 100vw;
     overflow-x: hidden;

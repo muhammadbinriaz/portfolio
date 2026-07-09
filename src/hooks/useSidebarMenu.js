@@ -1,50 +1,60 @@
-import { useEffect } from 'react'
-import { gsap } from '../lib/animations'
+import { useEffect } from 'react';
+import { gsap } from '../lib/animations';
 
-// Ported from the menu timelines in script.js / transition.js / playground.js.
-// lowerClass is "lower" for Home & Playground, "lower1" for Work (their CSS differs).
-export function useSidebarMenu(lowerClass = 'lower') {
+// Fullscreen menu open/close. Snappier + cleaner than the original port:
+// one paused timeline, played forward on open and reversed (faster) on close.
+export function useSidebarMenu() {
   useEffect(() => {
-    if (!gsap) return
+    if (!gsap) return;
 
-    const tl = gsap.timeline()
-    tl.to('.full', { top: '0vw', duration: 0.4 })
-    tl.from('.full h4', { y: -150, duration: 0.2, stagger: 0.1, opacity: 0 })
-    tl.from('.content-div h1', { x: -150, duration: 0.2, stagger: 0.1, opacity: 0 })
-    tl.from('.daba .acc h3', { x: -150, duration: 0.2, stagger: 0.1, opacity: 0 })
-    tl.from(`.daba .${lowerClass} h3`, {
-      x: -150,
-      duration: 0.2,
-      stagger: 0.1,
-      opacity: 0,
-      delay: 0,
-    })
-    tl.from('.full .come', { opacity: 0 })
-    tl.pause()
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: { ease: 'power3.out' },
+    });
 
-    const menu = document.querySelector('.come')
-    const cross = document.querySelector('.naver .cross')
-    const not = document.querySelector('.notshould')
+    tl.to('.full', { top: '0vw', duration: 0.5, ease: 'power4.inOut' })
+      .from(
+        '.full h4',
+        { y: -60, opacity: 0, duration: 0.35, stagger: 0.05 },
+        '-=0.25'
+      )
+      .from(
+        '.content-div h1',
+        { y: 60, opacity: 0, duration: 0.4, stagger: 0.06 },
+        '-=0.2'
+      )
+      .from(
+        '.daba h3',
+        { y: 24, opacity: 0, duration: 0.3, stagger: 0.03 },
+        '-=0.25'
+      );
 
-    const onMenu = () => {
-      document.body.style.overflow = 'hidden'
-      tl.play()
-    }
-    const onCross = () => {
-      document.body.style.overflow = ''
-      tl.reverse(1.9)
-    }
-    const onNot = () => tl.reverse(0.45)
+    const menu = document.querySelector('.come');
+    const cross = document.querySelector('.naver .cross');
+    const not = document.querySelector('.notshould');
 
-    menu && menu.addEventListener('click', onMenu)
-    cross && cross.addEventListener('click', onCross)
-    not && not.addEventListener('click', onNot)
+    const open = () => {
+      document.body.style.overflow = 'hidden';
+      tl.timeScale(1).play();
+    };
+    const close = () => {
+      // Reverse noticeably faster so closing feels crisp, then re-enable scroll.
+      tl.timeScale(1.8).reverse();
+      tl.eventCallback('onReverseComplete', () => {
+        document.body.style.overflow = '';
+      });
+    };
+
+    menu && menu.addEventListener('click', open);
+    cross && cross.addEventListener('click', close);
+    not && not.addEventListener('click', close);
 
     return () => {
-      menu && menu.removeEventListener('click', onMenu)
-      cross && cross.removeEventListener('click', onCross)
-      not && not.removeEventListener('click', onNot)
-      tl.kill()
-    }
-  }, [lowerClass])
+      menu && menu.removeEventListener('click', open);
+      cross && cross.removeEventListener('click', close);
+      not && not.removeEventListener('click', close);
+      document.body.style.overflow = '';
+      tl.kill();
+    };
+  }, []);
 }
