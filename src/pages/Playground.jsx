@@ -35,6 +35,24 @@ export default function Playground() {
     if (!gsap) return;
     if (ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
+    // --- Smooth scroll (Lenis) wired into ScrollTrigger -------------------
+    // The vertical scroll + the pinned horizontal card scroll both depend on
+    // ScrollTrigger being driven by Lenis. Without this link the pin never
+    // registers (the page can't scroll) and the cards jump straight to the end.
+    let lenis;
+    let tickerCb;
+    try {
+      if (Lenis) {
+        lenis = new Lenis();
+        lenis.on('scroll', ScrollTrigger.update);
+        tickerCb = (time) => lenis.raf(time * 1000);
+        gsap.ticker.add(tickerCb);
+        gsap.ticker.lagSmoothing(0);
+      }
+    } catch (e) {
+      console.error('Lenis failed', e);
+    }
+
     const ctx = gsap.context(() => {
       gsap.from('.nav', { opacity: 0, delay: 1.2, duration: 0.5 });
       gsap.from('img', { opacity: 0, delay: 2, duration: 0.6, stagger: 0.1 });
@@ -47,20 +65,21 @@ export default function Playground() {
       });
 
       // Pinned horizontal scroll (desktop only). Guarded so a failure here
-      // can never blank the page.
+      // can never blank the page. Uses the default (window) scroller which is
+      // what Lenis drives.
       try {
         const mm = gsap.matchMedia();
         mm.add('(min-width: 1024px)', () => {
           gsap.to('.card', {
-            xPercent: '-220',
+            xPercent: -220,
             ease: 'none',
             scrollTrigger: {
               trigger: '.page2',
-              scroller: 'body',
               start: 'top top',
               end: '+=6566',
               scrub: 1,
               pin: true,
+              invalidateOnRefresh: true,
             },
           });
         });
@@ -69,20 +88,16 @@ export default function Playground() {
       }
     }, wrapRef.current);
 
-    let lenis;
-    let rafId;
-    try {
-      if (Lenis) {
-        lenis = new Lenis();
-        function raf(time) {
-          lenis.raf(time);
-          rafId = requestAnimationFrame(raf);
-        }
-        rafId = requestAnimationFrame(raf);
-      }
-    } catch (e) {
-      console.error('Lenis failed', e);
-    }
+    // Re-measure once the layout settles and once images have loaded — image
+    // heights affect the pin distance / trigger positions.
+    const refresh = () => ScrollTrigger.refresh();
+    const raf = requestAnimationFrame(refresh);
+    const imgs = wrapRef.current
+      ? Array.from(wrapRef.current.querySelectorAll('img'))
+      : [];
+    imgs.forEach((img) => {
+      if (!img.complete) img.addEventListener('load', refresh);
+    });
 
     const cursor = document.querySelector('.cursor');
     const linkHandlers = [];
@@ -95,13 +110,16 @@ export default function Playground() {
     });
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      cancelAnimationFrame(raf);
+      imgs.forEach((img) => img.removeEventListener('load', refresh));
+      if (tickerCb) gsap.ticker.remove(tickerCb);
       if (lenis) lenis.destroy();
       linkHandlers.forEach(([el, en, lv]) => {
         el.removeEventListener('mouseenter', en);
         el.removeEventListener('mouseleave', lv);
       });
       ctx.revert();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 

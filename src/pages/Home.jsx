@@ -17,19 +17,28 @@ const sidebarItems = [
   },
 ];
 
-export default function Home() {
+export default function Home({ animate = true }) {
   const mainRef = useRef(null);
   const location = useLocation();
   useSidebarMenu('lower');
   useLiveTime();
 
   useEffect(() => {
-    if (!gsap) return;
+    // Wait until the loader is done (first load) so the hero reveal is actually
+    // visible instead of playing behind the loader overlay.
+    if (!gsap || !animate) return;
     let locoScroll;
+    let onRefresh;
 
     // Entrance + hover animations only need GSAP — run them first so the page
     // is always visible even if the smooth-scroll setup below fails.
     const ctx = gsap.context(() => {
+      // Pin the from-states explicitly (matches styles.css) so the reveal always
+      // animates regardless of stylesheet timing.
+      gsap.set('.boundingelem', { y: '100%', opacity: 0 });
+      gsap.set('.boundingelemUp', { y: '-200%' });
+      gsap.set(['.nav', '.chhotiheadings', '.herofooter'], { opacity: 0 });
+
       const tl = gsap.timeline();
       tl.to('.nav', {
         y: 10,
@@ -111,12 +120,10 @@ export default function Home() {
     // here can never blank the page.
     try {
       if (LocomotiveScroll && mainRef.current) {
-        locoScroll = new LocomotiveScroll({
-          el: mainRef.current,
-          smooth: true,
-        });
+        const el = mainRef.current;
+        locoScroll = new LocomotiveScroll({ el, smooth: true });
         locoScroll.on('scroll', ScrollTrigger.update);
-        ScrollTrigger.scrollerProxy(mainRef.current, {
+        ScrollTrigger.scrollerProxy(el, {
           scrollTop(value) {
             return arguments.length
               ? locoScroll.scrollTo(value, 0, 0)
@@ -130,9 +137,13 @@ export default function Home() {
               height: window.innerHeight,
             };
           },
-          pinType: mainRef.current.style.transform ? 'transform' : 'fixed',
+          pinType: el.style.transform ? 'transform' : 'fixed',
         });
-        ScrollTrigger.addEventListener('refresh', () => locoScroll.update());
+        // Keep a reference so we can REMOVE this listener on unmount — otherwise
+        // a later ScrollTrigger.refresh() (e.g. from the Playground page) would
+        // call update() on a destroyed Locomotive instance and throw.
+        onRefresh = () => locoScroll && locoScroll.update();
+        ScrollTrigger.addEventListener('refresh', onRefresh);
         ScrollTrigger.refresh();
       }
     } catch (err) {
@@ -141,14 +152,23 @@ export default function Home() {
 
     return () => {
       try {
+        if (onRefresh) ScrollTrigger.removeEventListener('refresh', onRefresh);
         ScrollTrigger.getAll().forEach((t) => t.kill());
         if (locoScroll) locoScroll.destroy();
+        // Locomotive tags <html> — make sure other routes can scroll natively.
+        document.documentElement.classList.remove(
+          'has-scroll-smooth',
+          'has-scroll-init',
+          'has-scroll-scrolling',
+          'has-scroll-dragging'
+        );
+        document.body.style.overflow = '';
       } catch (e) {
         /* noop */
       }
       ctx.revert();
     };
-  }, []);
+  }, [animate]);
 
   return (
     <>

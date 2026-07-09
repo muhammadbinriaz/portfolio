@@ -1,0 +1,11 @@
+import puppeteer from 'puppeteer-core';
+const EXEC='C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const b=await puppeteer.launch({executablePath:EXEC,headless:true,args:['--no-sandbox']});
+const p=await b.newPage();
+await p.setViewport({width:1366,height:800});
+p.on('console',m=>{const t=m.text(); if(!t.includes('Tracking')&&!t.includes('DevTools')&&!t.includes('Future Flag')) console.log('['+m.type()+']',t);});
+p.on('pageerror',e=>console.log('[PAGEERROR]',e.message));
+await p.goto('http://localhost:5173/playground',{waitUntil:'networkidle2'});
+await sleep(4000);
+await b.close();

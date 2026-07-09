@@ -12,6 +12,22 @@
     <link rel="stylesheet" href="/codegridTransition.css" />
     <link rel="stylesheet" href="/loco.css" />
     <link rel="stylesheet" href="/cynthiaAnim/style.css" />
+    <!-- Preload the per-route stylesheets so swapping them never blocks paint. -->
+    <link rel="preload" as="style" href="/styles.css" />
+    <link rel="preload" as="style" href="/work.css" />
+    <link rel="preload" as="style" href="/playground.css" />
+    <!-- Critical baseline: keep the screen black before the page CSS is applied
+         so we never flash raw/unstyled HTML (fixes the first-visit flicker).
+         Page content itself isn't rendered until its stylesheet is ready (see
+         usePageCss + App), so only this black backdrop shows during the wait. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

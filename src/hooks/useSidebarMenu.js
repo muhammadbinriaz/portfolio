@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import { gsap } from '../lib/animations'
 
 // Ported from the menu timelines in script.js / transition.js / playground.js.
 // lowerClass is "lower" for Home & Playground, "lower1" for Work (their CSS differs).
 export function useSidebarMenu(lowerClass = 'lower') {
   useEffect(() => {
-    const gsap = window.gsap
     if (!gsap) return
 
     const tl = gsap.timeline()

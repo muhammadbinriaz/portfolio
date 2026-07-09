@@ -15,7 +15,8 @@ export default function App() {
   // Loader only on the home route's first load (matches original behaviour).
   const [loaded, setLoaded] = useState(() => location.pathname !== '/')
 
-  usePageCss(location.pathname)
+  // true only once the current route's stylesheet is actually applied.
+  const cssReady = usePageCss(location.pathname)
 
   // Intercept .should link clicks -> run the block cover animation -> navigate (SPA).
   useEffect(() => {
@@ -32,21 +33,27 @@ export default function App() {
     return () => document.removeEventListener('click', onClick)
   }, [navigate])
 
-  // Reveal the blocks after each route (and on first mount).
+  // Reveal the blocks once the new route's page + its CSS are actually ready,
+  // so the cover stays up over an unstyled frame instead of flickering.
   useEffect(() => {
-    reveal()
-  }, [location.pathname])
+    if (cssReady) reveal()
+  }, [location.pathname, cssReady])
 
+  // Pages only mount once their CSS is present, so their measurements and
+  // entrance animations are always correct. Home additionally waits for the
+  // first-load loader to finish before animating.
   return (
     <>
       <TransitionOverlay />
-      {!loaded && <Loader onDone={() => setLoaded(true)} />}
+      {cssReady && !loaded && <Loader onDone={() => setLoaded(true)} />}
       <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/playground" element={<Playground />} />
-        </Routes>
+        {cssReady && (
+          <Routes location={location}>
+            <Route path="/" element={<Home animate={loaded} />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/playground" element={<Playground />} />
+          </Routes>
+        )}
       </ErrorBoundary>
     </>
   )
