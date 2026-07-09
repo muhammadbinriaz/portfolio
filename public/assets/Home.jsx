@@ -158,7 +158,7 @@ export default function Home({ animate = true }) {
           </div>
           <div className="heading">
             <div className="bounding">
-              <h1 className="boundingelem web-h1">AI &amp; WEB</h1>
+              <h1 className="boundingelem web-h1">Web</h1>
             </div>
             <div className="blocktext">
               <div className="bounding">
@@ -176,7 +176,7 @@ export default function Home({ animate = true }) {
               </h5>
             </div>
             <div className="bounding">
-              <h5 className="boundingelemUp">work from july 26'</h5>
+              <h5 className="boundingelemUp">work from june 25'</h5>
             </div>
           </div>
           <div className="herofooter">
@@ -202,17 +202,17 @@ export default function Home({ animate = true }) {
         <div className="second">
           <div className="elem">
             <img src="/assets/htmlBest.png" alt="" />
-            <h1>AI DEV.</h1>
+            <h1>AI DEVELOPMENT</h1>
             <h5>2022</h5>
           </div>
           <div className="elem">
             <img src="/assets/css-3.png" alt="" />
-            <h1>PYTHON Dev.</h1>
+            <h1>PYTHON</h1>
             <h5>2022</h5>
           </div>
           <div className="elem">
-            <img src="/assets/fastapi.png" alt="" />
-            <h1>FASTAPI Backend</h1>
+            <img src="/assets/js.png" alt="" />
+            <h1>FASTAPI</h1>
             <h5>2022</h5>
           </div>
           <div className="elem elemlast">
@@ -222,17 +222,17 @@ export default function Home({ animate = true }) {
           </div>
           <div className="elem elemlast">
             <img src="/assets/python.webp" alt="" />
-            <h1>Full STack Dev.</h1>
+            <h1>Full STack Dev</h1>
             <h5>2022</h5>
           </div>
           <div className="elem elemlast">
             <img src="/assets/nodejs_logo.png" alt="" />
-            <h1>Node.JS Backend</h1>
+            <h1>Node.JS</h1>
             <h5>2022</h5>
           </div>
           <div className="elem elemlast">
             <img src="/assets/Nextjs1.jpeg" alt="" />
-            <h1>NExt.JS DEV.</h1>
+            <h1>NExt.JS</h1>
             <h5>2022</h5>
           </div>
 
