@@ -14,12 +14,19 @@ const MAP = {
 // applied. Consumers gate rendering/animations on it so we never (a) flash raw
 // unstyled HTML, or (b) measure/animate elements before their CSS exists (which
 // broke the hero letter reveal and the Playground pinned scroll).
-export function usePageCss(pathname) {
+export function usePageCss(pathname, onReady) {
   const [cssReady, setCssReady] = useState(false)
 
   // useLayoutEffect so the swap happens before the browser paints the new route.
   useLayoutEffect(() => {
     const href = MAP[pathname]
+
+    // Fire once the *new* route's CSS has actually landed. Driven from here
+    // (not an effect in App) so the reveal never fires on the stale `cssReady`
+    // value carried across a pathname change — that used to start the block
+    // reveal, get killed/reset by the real reveal, and read as a "stuck for a
+    // second then finishes" hitch after a few navigations.
+    const ready = () => onReady && onReady()
 
     // New route -> nothing is guaranteed styled yet.
     setCssReady(false)
@@ -28,6 +35,7 @@ export function usePageCss(pathname) {
     if (!href) {
       setCssReady(true)
       document.documentElement.classList.add('css-ready')
+      ready()
       return
     }
 
@@ -47,6 +55,7 @@ export function usePageCss(pathname) {
       })
       setCssReady(true)
       document.documentElement.classList.add('css-ready')
+      ready()
     }
 
     link.addEventListener('load', finish)

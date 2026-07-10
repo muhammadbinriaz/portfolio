@@ -92,32 +92,37 @@ export default function Home({ animate = true }) {
       // as the page scrolls (Lenis) while hovering, so a cached value would make
       // the image drift up/down. A single getBoundingClientRect read on a
       // (browser-throttled) mousemove is cheap.
-      document.querySelectorAll(".elem").forEach((elem) => {
-        const img = elem.querySelector("img");
-        let rotate = 0;
-        const setPos = (e) => {
-          const diff = e.clientY - elem.getBoundingClientRect().top;
-          const diffrot = e.clientX - rotate;
-          rotate = e.clientX;
-          gsap.to(img, {
-            opacity: 1,
-            borderRadius: "20px",
-            ease: "power3",
-            top: diff,
-            left: e.clientX,
-            rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),
-            overwrite: "auto",
+      // Only on hover-capable pointers: on touch the follower is hidden anyway
+      // (CSS) and attaching the mouse* listeners made a tap fire them for no
+      // reason — which could nudge the page on first tap.
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        document.querySelectorAll(".elem").forEach((elem) => {
+          const img = elem.querySelector("img");
+          let rotate = 0;
+          const setPos = (e) => {
+            const diff = e.clientY - elem.getBoundingClientRect().top;
+            const diffrot = e.clientX - rotate;
+            rotate = e.clientX;
+            gsap.to(img, {
+              opacity: 1,
+              borderRadius: "20px",
+              ease: "power3",
+              top: diff,
+              left: e.clientX,
+              rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),
+              overwrite: "auto",
+            });
+          };
+          elem.addEventListener("mouseenter", (e) => {
+            gsap.set(img, { zIndex: 99999, display: "block" });
+            setPos(e);
           });
-        };
-        elem.addEventListener("mouseenter", (e) => {
-          gsap.set(img, { zIndex: 99999, display: "block" });
-          setPos(e);
+          elem.addEventListener("mousemove", setPos);
+          elem.addEventListener("mouseleave", () => {
+            gsap.to(img, { opacity: 0, ease: "power3", duration: 0.5 });
+          });
         });
-        elem.addEventListener("mousemove", setPos);
-        elem.addEventListener("mouseleave", () => {
-          gsap.to(img, { opacity: 0, ease: "power3", duration: 0.5 });
-        });
-      });
+      }
     }, mainRef.current);
 
     return () => ctx.revert();

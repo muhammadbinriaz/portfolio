@@ -18,7 +18,9 @@ export default function App() {
   const [loaded, setLoaded] = useState(() => location.pathname !== '/')
 
   // true only once the current route's stylesheet is actually applied.
-  const cssReady = usePageCss(location.pathname)
+  // `reveal` is fired from inside usePageCss once that happens, so the block
+  // reveal can never run on the stale cssReady value from the previous route.
+  const cssReady = usePageCss(location.pathname, reveal)
 
   // Intercept .should link clicks -> run the block cover animation -> navigate (SPA).
   useEffect(() => {
@@ -34,12 +36,6 @@ export default function App() {
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)
   }, [navigate])
-
-  // Reveal the blocks once the new route's page + its CSS are actually ready,
-  // so the cover stays up over an unstyled frame instead of flickering.
-  useEffect(() => {
-    if (cssReady) reveal()
-  }, [location.pathname, cssReady])
 
   // Pages only mount once their CSS is present, so their measurements and
   // entrance animations are always correct. Home additionally waits for the

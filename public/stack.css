@@ -329,6 +329,14 @@ body {
     width: 5vw;
     height: 5vw;
   }
+  /* Phones are narrower than the 200px minimum column, so the auto-fill grid
+     collapses to a single vertical line. Let the pills just wrap adjacent
+     instead — keeps the chip-list feel without changing the desktop layout. */
+  .cat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .stack .footer {
     flex-direction: column-reverse;
     justify-content: space-between;

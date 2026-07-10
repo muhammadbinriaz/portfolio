@@ -202,6 +202,8 @@ body {
   padding-right: 0;
   border-top: 1px solid #888;
   position: relative;
+  /* Kill the 300ms tap delay / double-tap-zoom nudge on first tap (mobile). */
+  touch-action: manipulation;
 }
 
 .elem h1 {
@@ -398,7 +400,7 @@ body {
   }
   .second {
     margin-top: 15vw;
-    width: 120%;
+    width: 100%;
   }
 }
 @media (min-width: 1px) and (max-width: 639px) {
