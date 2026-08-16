@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "General Sans";
-  src: url(./assets/GeneralSans-Medium.woff2);
-  font-display: swap;
-}
-
 .transition {
   position: fixed;
   inset: 0;
@@ -25,7 +19,7 @@
 .tn {
   position: relative;
   display: inline-block;
-  font-family: "General Sans", sans-serif;
+  font-family: "General Sans", "Segoe UI", system-ui, sans-serif;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.045em;

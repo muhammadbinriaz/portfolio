@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Muhammad Bin Riaz &#183; Full-Stack &amp; AI</title>
     <link
+      rel="preload"
+      href="/assets/GeneralSans-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/GeneralSans-Medium.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
     />
@@ -16,16 +30,28 @@
     <link rel="preload" as="style" href="/work.css" />
     <link rel="preload" as="style" href="/about.css" />
     <link rel="preload" as="style" href="/contact.css" />
-    <!-- Critical baseline: keep the screen black before the page CSS is applied
-         so we never flash raw/unstyled HTML (fixes the first-visit flicker).
-         Page content itself isn't rendered until its stylesheet is ready (see
-         usePageCss + App), so only this black backdrop shows during the wait. -->
     <style>
+      @font-face {
+        font-family: "General Sans";
+        src: url("/assets/GeneralSans-Regular.woff2") format("woff2");
+        font-weight: 100 450;
+        font-style: normal;
+        font-display: optional;
+      }
+      @font-face {
+        font-family: "General Sans";
+        src: url("/assets/GeneralSans-Medium.woff2") format("woff2");
+        font-weight: 451 900;
+        font-style: normal;
+        font-display: optional;
+      }
       html,
       body {
         margin: 0;
         padding: 0;
         background: #000;
+        font-family: "General Sans", "Segoe UI", system-ui, sans-serif;
+        font-synthesis: none;
       }
     </style>
   </head>

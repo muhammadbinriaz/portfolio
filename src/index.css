@@ -1,6 +1,26 @@
 /* Global, bundled styles — guaranteed present before first paint.
    Kept intentionally small; per-route look still comes from the page CSS. */
 
+@font-face {
+  font-family: "General Sans";
+  src: url("/assets/GeneralSans-Regular.woff2") format("woff2");
+  font-weight: 100 450;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("/assets/GeneralSans-Medium.woff2") format("woff2");
+  font-weight: 451 900;
+  font-style: normal;
+  font-display: optional;
+}
+
+html {
+  font-family: "General Sans", "Segoe UI", system-ui, sans-serif;
+  font-synthesis: none;
+}
+
 /* ---- Unified custom cursor (identical on every page) -------------------- */
 /* `html .minicircle` beats the page-specific `.minicircle` rules so the dot is
    always position:fixed (follows the viewport, never drifts while scrolling). */
@@ -201,7 +221,7 @@ img {
 .loader-num {
   margin: 0;
   padding: 0.12em 0.28em;
-  font-family: "General Sans", sans-serif;
+  font-family: "General Sans", "Segoe UI", system-ui, sans-serif;
   font-size: 18vw;
   font-weight: 800;
   line-height: 0.85;
