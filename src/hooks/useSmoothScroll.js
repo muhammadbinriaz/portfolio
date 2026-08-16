@@ -1,37 +1,72 @@
 import { useEffect } from 'react';
 import { gsap, ScrollTrigger, Lenis } from '../lib/animations';
+import { registerLenis } from '../lib/scroll';
 
-// One smooth-scroll implementation for the whole app (Lenis), replacing the
-// heavier LocomotiveScroll that used to throttle the home page and show its own
-// scrollbar. Driving Lenis from gsap's ticker keeps everything on a single rAF
-// loop (smoother, 60fps friendly) and keeps ScrollTrigger perfectly in sync.
-//
-// rootRef: the page wrapper, used to watch its images/size so the scroll limit
-// is recomputed once media loads (this is what was locking mobile scrolling
-// until the menu was toggled).
+function attachHideNav(lenis) {
+  const nav = document.querySelector('.nav');
+  if (!nav || !gsap) return () => {};
+
+  let last = 0;
+  let hidden = false;
+
+  const setHidden = (next) => {
+    if (document.documentElement.classList.contains('menu-open')) return;
+    hidden = next;
+    gsap.to(nav, {
+      yPercent: next ? -110 : 0,
+      duration: 0.5,
+      ease: next ? 'power3.inOut' : 'power3.out',
+      overwrite: true,
+    });
+  };
+
+  const onScroll = (y) => {
+    if (document.documentElement.classList.contains('menu-open')) return;
+    if (y <= 32) {
+      if (hidden) setHidden(false);
+      last = y;
+      return;
+    }
+    const dy = y - last;
+    if (dy > 6 && !hidden) setHidden(true);
+    else if (dy < -6 && hidden) setHidden(false);
+    last = y;
+  };
+
+  const fromLenis = (e) => onScroll(e.scroll);
+  const fromWin = () => onScroll(window.scrollY);
+  lenis.on('scroll', fromLenis);
+  window.addEventListener('scroll', fromWin, { passive: true });
+
+  return () => {
+    if (typeof lenis.off === 'function') lenis.off('scroll', fromLenis);
+    window.removeEventListener('scroll', fromWin);
+    gsap.killTweensOf(nav);
+    gsap.set(nav, { yPercent: 0 });
+  };
+}
+
 export function useSmoothScroll(rootRef) {
   useEffect(() => {
     if (!Lenis) return;
 
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 0.95,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      // Native (non-hijacked) touch scrolling — reliable on mobile.
       syncTouch: false,
     });
 
-    // Always start a freshly-mounted route at the top (SPA keeps the old scroll
-    // position otherwise, which made revisits feel "weird").
+    registerLenis(lenis);
     lenis.scrollTo(0, { immediate: true });
     window.scrollTo(0, 0);
 
     lenis.on('scroll', ScrollTrigger.update);
     const ticker = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(ticker);
-    gsap.ticker.lagSmoothing(0);
 
-    // Recompute scroll extents once the layout/images settle.
+    const detachNav = attachHideNav(lenis);
+
     const resize = () => {
       lenis.resize();
       ScrollTrigger.refresh();
@@ -56,7 +91,9 @@ export function useSmoothScroll(rootRef) {
       window.removeEventListener('load', resize);
       imgs.forEach((img) => img.removeEventListener('load', resize));
       if (ro) ro.disconnect();
+      detachNav();
       gsap.ticker.remove(ticker);
+      registerLenis(null);
       lenis.destroy();
     };
   }, [rootRef]);

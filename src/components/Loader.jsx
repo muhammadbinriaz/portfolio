@@ -1,66 +1,67 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from '../lib/animations';
+import { prefersReducedMotion } from '../lib/motion';
 
-// Ported from the loader logic in script.js (counter + collapsing bars).
-// Shown once on first load of the home route (mirrors the original home loader).
 export default function Loader({ onDone }) {
+  const wrapRef = useRef(null);
   const counterRef = useRef(null);
-  const overlayRef = useRef(null);
 
   useEffect(() => {
-    if (!gsap) {
+    const finish = () => {
+      document.body.style.overflow = '';
       if (onDone) onDone();
+    };
+
+    if (!gsap || prefersReducedMotion()) {
+      finish();
       return;
     }
+
     document.body.style.overflow = 'hidden';
+    gsap.set(wrapRef.current, { y: 0, force3D: true });
 
-    let currentValue = 0;
-    const counterEl = counterRef.current;
+    const mid = 4 + Math.floor(Math.random() * 2);
+    const pts = new Set();
+    while (pts.size < mid) pts.add(10 + Math.floor(Math.random() * 80));
+    const values = [...pts].sort((a, b) => a - b);
+    values.push(100);
 
-    function updateCounter() {
-      if (currentValue === 100) return;
-      currentValue += Math.floor(Math.random() * 10) + 1;
-      if (currentValue > 100) currentValue = 100;
-      if (counterEl) counterEl.textContent = currentValue;
-      const delay = Math.floor(Math.random() * 200) + 1;
-      setTimeout(updateCounter, delay);
+    let i = 0;
+    let timer;
+    let exit;
+
+    function tick() {
+      const v = values[i];
+      if (counterRef.current) counterRef.current.textContent = String(v);
+      i += 1;
+      if (i >= values.length) {
+        exit = gsap.to(wrapRef.current, {
+          y: -window.innerHeight,
+          duration: 0.85,
+          delay: 0.28,
+          ease: 'power3.inOut',
+          force3D: true,
+          onComplete: finish,
+        });
+        return;
+      }
+      timer = setTimeout(tick, Math.floor(Math.random() * 200) + 260);
     }
-    updateCounter();
 
-    const t1 = gsap.to(counterEl, {
-      duration: 0.25,
-      delay: 2.5,
-      opacity: 0,
-    });
-    const t2 = gsap.to('.bar', {
-      duration: 1.5,
-      delay: 2.5,
-      height: 0,
-      stagger: { amount: 0.5 },
-      ease: 'power4.inOut',
-      onComplete: () => {
-        document.body.style.overflow = '';
-        if (onDone) onDone();
-      },
-    });
+    timer = setTimeout(tick, 320);
 
     return () => {
       document.body.style.overflow = '';
-      t1.kill();
-      t2.kill();
+      clearTimeout(timer);
+      if (exit) exit.kill();
     };
   }, [onDone]);
 
   return (
-    <>
-      <h1 className="counter" ref={counterRef}></h1>
-      <div className="overlay" ref={overlayRef}>
-        <div className="bar"></div>
-        <div className="bar"></div>
-        <div className="bar"></div>
-        <div className="bar"></div>
-        <div className="bar"></div>
-      </div>
-    </>
+    <div className="loader-screen" ref={wrapRef}>
+      <p className="loader-num" ref={counterRef}>
+        0
+      </p>
+    </div>
   );
 }

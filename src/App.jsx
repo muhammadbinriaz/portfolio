@@ -1,28 +1,27 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Home from './pages/Home'
 import Work from './pages/Work'
-import Playground from './pages/Playground'
-import Stack from './pages/Stack'
+import About from './pages/About'
+import Contact from './pages/Contact'
 import Loader from './components/Loader'
 import TransitionOverlay from './components/TransitionOverlay'
 import ErrorBoundary from './components/ErrorBoundary'
 import Cursor from './components/Cursor'
-import { cover, reveal } from './lib/transition'
+import { cover, reveal, isTransitioning } from './lib/transition'
 import { usePageCss } from './hooks/usePageCss'
+import { prefersReducedMotion } from './lib/motion'
 
 export default function App() {
   const location = useLocation()
   const navigate = useNavigate()
-  // Loader only on the home route's first load (matches original behaviour).
-  const [loaded, setLoaded] = useState(() => location.pathname !== '/')
+  const [loaded, setLoaded] = useState(() => {
+    if (location.pathname !== '/') return true
+    return prefersReducedMotion()
+  })
 
-  // true only once the current route's stylesheet is actually applied.
-  // `reveal` is fired from inside usePageCss once that happens, so the block
-  // reveal can never run on the stale cssReady value from the previous route.
-  const cssReady = usePageCss(location.pathname, reveal)
+  const cssReady = usePageCss(location.pathname)
 
-  // Intercept .should link clicks -> run the block cover animation -> navigate (SPA).
   useEffect(() => {
     function onClick(e) {
       const link = e.target.closest('.should')
@@ -30,6 +29,7 @@ export default function App() {
       const href = link.getAttribute('href')
       if (!href || href.startsWith('#') || href.startsWith('mailto:')) return
       if (href === window.location.pathname) return
+      if (isTransitioning()) return
       e.preventDefault()
       cover().then(() => navigate(href))
     }
@@ -37,23 +37,28 @@ export default function App() {
     return () => document.removeEventListener('click', onClick)
   }, [navigate])
 
-  // Pages only mount once their CSS is present, so their measurements and
-  // entrance animations are always correct. Home additionally waits for the
-  // first-load loader to finish before animating.
+  useEffect(() => {
+    if (!cssReady || !isTransitioning()) return
+    const id = window.setTimeout(() => {
+      reveal()
+    }, 400)
+    return () => window.clearTimeout(id)
+  }, [cssReady, location.pathname])
+
   return (
     <>
       <TransitionOverlay />
-      {/* One cursor for the whole app, mounted once and kept across route
-          changes so it never remounts (and "jumps" to 0,0) when navigating. */}
       <Cursor />
-      {cssReady && !loaded && <Loader onDone={() => setLoaded(true)} />}
+      {!loaded && <Loader onDone={() => setLoaded(true)} />}
       <ErrorBoundary>
         {cssReady && (
           <Routes location={location}>
             <Route path="/" element={<Home animate={loaded} />} />
             <Route path="/work" element={<Work />} />
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/stack" element={<Stack />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/playground" element={<Navigate to="/" replace />} />
+            <Route path="/stack" element={<Navigate to="/" replace />} />
           </Routes>
         )}
       </ErrorBoundary>

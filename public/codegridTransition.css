@@ -1,52 +1,63 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-html , body{
-    height: 100%;
-    width: 100%;
+@font-face {
+  font-family: "General Sans";
+  src: url(./assets/GeneralSans-Medium.woff2);
+  font-display: swap;
 }
 
-.transition{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    z-index: 9999999999;
-    pointer-events: none;
+.transition {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.transition-row {
-    flex: 1;
-    display: flex;
+.transition-panel {
+  position: absolute;
+  inset: -2px 0;
+  background-color: #a3a3a3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
 }
 
-.transition-row.row-1 .block{
-    transform-origin: top;
+.tn {
+  position: relative;
+  display: inline-block;
+  font-family: "General Sans", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: clamp(72px, 9.5vw, 152px);
 }
 
-.transition-row.row-2 .block{
-    transform-origin: bottom;
+.tn-ghost {
+  display: block;
+  color: rgba(0, 0, 0, 0.22);
 }
 
-.block{
-    flex: 1;
-    background-color: #6B6E70;
-    /* Default hidden so a missed reveal can never leave the overlay covering
-       the page. cover()/reveal() still drive the same animation. */
-    transform: scaleY(0);
-    visibility: hidden;
-    will-change: transform;
+.tn-mask {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
 }
 
+.tn-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  color: #111;
+  white-space: nowrap;
+}
 
-
-@media (max-width:768px) {
-    .block{
-        background-color: #6B6E70;
-    }
+@media (max-width: 768px) {
+  .tn {
+    font-size: clamp(40px, 12vw, 64px);
+  }
 }

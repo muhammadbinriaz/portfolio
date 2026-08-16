@@ -12,8 +12,9 @@ export function useLiveTime() {
       hours = hours ? hours : 12
       minutes = minutes < 10 ? '0' + minutes : minutes
       const timeString = `${hours}:${minutes} ${amPm}`
-      const timeElement = document.querySelector('.footerleft .time')
-      if (timeElement) timeElement.textContent = timeString
+      document.querySelectorAll('.time').forEach((el) => {
+        el.textContent = timeString
+      })
     }
     updateLiveTime()
     const id = setInterval(updateLiveTime, 1000)

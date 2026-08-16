@@ -1,11 +1,13 @@
 @font-face {
   font-family: "General Sans";
   src: url(./assets/GeneralSans-Medium.woff2);
+  font-display: swap;
 }
 
 @font-face {
   font-family: "General Sans";
   src: url(./assets/GeneralSans-Regular.woff2);
+  font-display: swap;
 }
 
 ::selection {
@@ -78,6 +80,7 @@ body {
   width: 100%;
   min-height: 100svh;
   background-color: black;
+  padding-top: 72px;
 }
 .nav {
   width: 100%;
@@ -98,7 +101,7 @@ body {
   cursor: pointer;
 }
 .heading {
-  margin-top: 50px;
+  margin-top: 24px;
 }
 
 .heading h1 {
@@ -223,13 +226,13 @@ body {
 }
 
 .elem img {
-  /* display: none; */
   transition: opacity 0.1s linear;
   opacity: 0;
   height: 140%;
   z-index: 9999;
   position: absolute;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   pointer-events: none;
 }
 
@@ -294,6 +297,10 @@ body {
   font-size: 16px;
   margin-top: 4px;
   letter-spacing: 0.7px;
+}
+.subscribe a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .footer {
@@ -844,7 +851,7 @@ body {
     color: #000;
     background-color: #a3a3a3;
     padding: 0vw 1vw;
-    z-index: 999;
+    z-index: 100000;
   }
   .naver {
     flex: 1/3;
@@ -872,7 +879,6 @@ body {
     text-transform: uppercase;
     font-size: 5.2vw;
     /* margin-top: -28vw; */
-    padding-bottom: 39vw;
     margin-left: 5vw;
   }
   .content h1 {
@@ -913,8 +919,11 @@ body {
     border-bottom: 1px solid #cec6c6;
     gap: 14px;
   }
+  .acc a {
+    color: #000;
+    text-decoration: none;
+  }
   .acc h3 {
-    /* background-color: red; */
     font-size: 3.6vw !important;
     color: #000;
   }
@@ -951,7 +960,7 @@ body {
     color: #000;
     background-color: #a3a3a3;
     /* padding: 4vw 5vw; */
-    z-index: 999;
+    z-index: 100000;
   }
   .naver {
     flex: 1/3;
@@ -978,7 +987,6 @@ body {
     text-transform: uppercase;
     font-size: 2.5vw;
     /* margin-top: -55vw; */
-    padding-bottom: 39vw;
     margin-left: 3vw;
   }
   .content h1 {
@@ -1036,6 +1044,10 @@ body {
     text-decoration: none;
     color: #000;
   }
+  .acc a {
+    color: #000;
+    text-decoration: none;
+  }
   .acc h3 {
     font-size: 2.2vw;
     font-weight: bold;
@@ -1047,9 +1059,11 @@ body {
   width: 100svw;
   position: fixed;
   top: 0;
-  top: -300vw;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  left: 0;
+  overflow: hidden;
+  z-index: 100000;
+  visibility: hidden;
+  opacity: 0;
 }
 
 /* loader */
@@ -1110,6 +1124,19 @@ body {
 @media (min-width: 768px) {
   .come {
     display: none !important;
+  }
+  .full {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav,
+  .herofooter,
+  .boundingelem,
+  .boundingelemUp {
+    opacity: 1;
+    transform: none;
   }
 }
 

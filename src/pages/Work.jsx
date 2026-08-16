@@ -1,55 +1,96 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { gsap } from '../lib/animations';
 import Sidebar from '../components/Sidebar';
+import DesktopNav from '../components/DesktopNav';
+import Footer from '../components/Footer';
 import { useSidebarMenu } from '../hooks/useSidebarMenu';
 import { useLiveTime } from '../hooks/useLiveTime';
 import { useSmoothScroll } from '../hooks/useSmoothScroll';
+import { sidebarItems } from '../data/nav';
+import { SITE } from '../data/site';
+import { projects } from '../data/projects';
+import { prefersReducedMotion } from '../lib/motion';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
-const sidebarItems = [
-  { label: 'HOME', href: '/', cls: 'should' },
-  { label: 'work', href: '#', cls: '' },
-  { label: 'Playground', href: '/playground', cls: 'should' },
-  { label: 'Stack', href: '/stack', cls: 'should' },
-  {
-    label: 'Contact',
-    href: 'mailto:muhammadbinriaz675@gmail.com',
-    cls: 'notshould',
-  },
-];
+function youtubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
+  return m ? m[1] : null;
+}
 
-const gridItems = [
-  { img: 'ixperience.webp', title: 'LUCId Dreams', year: '2023' },
-  { img: 'hudu.webp', title: 'hudu', year: '2023' },
-  { img: 'newP1.jpg', title: 'fashion draw', year: '2024' },
-  { img: 'newP2.jpg', title: 'Portfolio design', year: '2024' },
-  { img: 'newP3.jpg', title: 'beverage product', year: '2024' },
-  { img: 'newP4.jpg', title: 'store ux', year: '2025' },
-  { img: 'newP5.jpg', title: 'earphones ux', year: '2025' },
-  { img: 'newP6.jpg', title: 'App home', year: '2025' },
-];
+function ProjectMedia({ project }) {
+  const yt = youtubeId(project.video);
+  if (yt) {
+    return (
+      <div className="project-media">
+        <iframe
+          src={`https://www.youtube.com/embed/${yt}`}
+          title={`${project.title} demo`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+  if (project.video) {
+    return (
+      <div className="project-media">
+        <video
+          src={project.video}
+          poster={project.poster || undefined}
+          controls
+          playsInline
+          preload="metadata"
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="project-media">
+      {project.poster ? (
+        <img src={project.poster} alt="" className="image" />
+      ) : null}
+      <div className="demo-ph" aria-label={`${project.title} demo coming`}>
+        <i className="ri-play-fill" aria-hidden="true"></i>
+        <span>Demo coming</span>
+      </div>
+    </div>
+  );
+}
 
 export default function Work() {
   const mainRef = useRef(null);
+  const location = useLocation();
   useSidebarMenu();
   useLiveTime();
   useSmoothScroll(mainRef);
+  useScrollReveal(mainRef);
 
   useEffect(() => {
     if (!gsap) return;
 
+    const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
-      gsap.from('.items', { opacity: 0, duration: 0.6, delay: 2 });
-      gsap.to(['.front h1', '.front button'], {
+      if (reduce) {
+        gsap.set(['.front h1', '.left', '.middle', '.come2'], {
+          clearProps: 'all',
+          opacity: 1,
+          y: 0,
+        });
+        return;
+      }
+
+      gsap.to('.front h1', {
         y: 0,
-        delay: 0.85,
-        duration: 1.4,
-        ease: 'power3.out',
+        delay: 0.12,
+        duration: 0.9,
+        ease: 'expo.out',
       });
       gsap.to(['.left', '.middle', '.come2'], {
         y: 0,
-        delay: 1,
-        stagger: 0.1,
-        duration: 1.2,
+        delay: 0.18,
+        duration: 0.75,
         ease: 'power3.out',
         opacity: 1,
       });
@@ -61,110 +102,82 @@ export default function Work() {
   return (
     <>
       <div className="main" ref={mainRef}>
-        <Sidebar lowerClass="lower1" items={sidebarItems} />
+        <Sidebar lowerClass="lower1" items={sidebarItems(location.pathname)} />
 
         <div className="hero">
           <div className="nav">
             <div className="left">
-              <a href="https://muhammadbinriaz.com">Muhammad Bin Riaz</a>
+              <a className="should" href="/">
+                {SITE.name}
+              </a>
             </div>
             <div className="middle">
               <h4 className="come">MENU</h4>
             </div>
-            <div className="come2 right">
-              <a className="should yes" href="/">
-                HOME
-              </a>
-              <a className="should yes" href="/playground">
-                PLAYGROUND
-              </a>
-              <a className="should yes" href="/stack">
-                STACK
-              </a>
-              <a className="yes" href="mailto:muhammadbinriaz675@gmail.com">
-                CONTACT
-              </a>
-            </div>
+            <DesktopNav pathname={location.pathname} className="come2 right" />
           </div>
           <div className="hero-cont">
             <div className="front">
               <h1 className="giver">work</h1>
-              <button>ixperience</button>
+              <p className="work-lead">
+                Selected builds — GitHub now, demo videos as they land.
+              </p>
             </div>
             <div className="lower">
-              {gridItems.map((it, i) => (
-                <div className="grid-img-container" key={i}>
-                  <div className="items">
-                    <div className="overlay"></div>
-                    <img
-                      src={'/assets/' + it.img}
-                      className="image"
-                      alt={it.title}
-                      decoding="async"
-                      loading={i < 2 ? 'eager' : 'lazy'}
-                    />
-                    <div className="bottom-line">
-                      <h2>{it.title}</h2>
-                      <h1>{it.year}</h1>
-                    </div>
+              {projects.map((project) => (
+                <article className="items project js-reveal" key={project.id}>
+                  <ProjectMedia project={project} />
+                  <div className="bottom-line">
+                    <h2>{project.title}</h2>
+                    <h1>{project.year}</h1>
                   </div>
-                </div>
+                  <p className="project-blurb">{project.blurb}</p>
+                  <ul className="project-tags">
+                    {project.tags.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                  <div className="project-links">
+                    {project.github ? (
+                      <a
+                        className="yes"
+                        href={project.github}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        GitHub
+                        <i className="ri-arrow-right-up-line"></i>
+                      </a>
+                    ) : (
+                      <span className="muted">GitHub soon</span>
+                    )}
+                    {project.video ? (
+                      <a
+                        className="yes"
+                        href={project.video}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Watch demo
+                        <i className="ri-arrow-right-up-line"></i>
+                      </a>
+                    ) : (
+                      <span className="muted">Demo coming</span>
+                    )}
+                  </div>
+                </article>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="about">
-          <img src="/assets/best.png" alt="" />
-          <div className="textabout">
-            <h5>(about me)</h5>
-            <p>
-              Need a sleek, simple website or a sophisticated, complex web
-              application with high-end, advanced animation? I deliver both with
-              precision and creative flair. Let's connect to bring your unique
-              vision to life.
-            </p>
-            <a
-              className="talk yes"
-              href="mailto:muhammadbinriaz675@gmail.com"
-            >
-              let's Talk
-            </a>
-          </div>
+        <div className="work-cta js-reveal">
+          <a className="talk should yes" href="/contact">
+            let&apos;s talk
+          </a>
         </div>
 
-        <div className="footer">
-          <div className="footerleft">
-            <h5>2025 &copy;</h5>
-            <h5 className="time">0:05 AM EST</h5>
-          </div>
-          <div className="footerright">
-            <a
-              className="yes"
-              href="https://webwiz-world.slack.com/team/U095KFWFLTW"
-              target="_blank"
-            >
-              slack
-            </a>
-            <a
-              className="yes"
-              href="https://www.instagram.com/malick_158?igsh=MXc5cnhheHpnZXoxNQ=="
-              target="_blank"
-            >
-              Instagram
-            </a>
-            <a className="yes" href="#" target="_blank">
-              LINKEDIN
-            </a>
-            <a
-              className="yes"
-              href="https://x.com/malick_158?t=NOFN7hWzudUNqBa5SIcz1w&s=09"
-              target="_blank"
-            >
-              twitter/x
-            </a>
-          </div>
-        </div>
+        <Footer />
       </div>
     </>
   );
