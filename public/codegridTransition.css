@@ -21,11 +21,13 @@
   display: inline-block;
   font-family: "General Sans", "Segoe UI", system-ui, sans-serif;
   font-weight: 800;
+  font-synthesis: none;
   text-transform: uppercase;
   letter-spacing: -0.045em;
   line-height: 1;
   white-space: nowrap;
-  font-size: clamp(72px, 9.5vw, 152px);
+  font-size: clamp(44px, 4.5vw, 72px);
+  -webkit-font-smoothing: antialiased;
 }
 
 .tn-ghost {
@@ -53,5 +55,6 @@
 @media (max-width: 768px) {
   .tn {
     font-size: clamp(40px, 12vw, 64px);
+    font-weight: 500;
   }
 }

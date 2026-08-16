@@ -26,6 +26,10 @@ function nameBox() {
   return document.querySelector('.tn');
 }
 
+function ghostEl() {
+  return document.querySelector('.tn-ghost');
+}
+
 function showNav() {
   document.documentElement.classList.remove('route-covering');
   const nav = document.querySelector('.nav');
@@ -55,19 +59,23 @@ export function cover() {
 
     const h = window.innerHeight;
     const mask = maskEl();
+    const ghost = ghostEl();
     const coverDur = isMobile() ? 1.4 : 0.9;
 
     if (!gsap || prefersReducedMotion()) {
       gsap.set(el, { y: 0, autoAlpha: 1 });
       if (mask) gsap.set(mask, { height: '100%' });
+      if (ghost) gsap.set(ghost, { opacity: 0 });
       snapMenuClosed();
       return resolve();
     }
 
     gsap.killTweensOf(el);
     if (mask) gsap.killTweensOf(mask);
+    if (ghost) gsap.killTweensOf(ghost);
     gsap.set(el, { y: h, autoAlpha: 1, force3D: true });
     if (mask) gsap.set(mask, { height: 0 });
+    if (ghost) gsap.set(ghost, { opacity: 1 });
 
     const tl = gsap.timeline({ onComplete: resolve });
     tl.to(el, {
@@ -81,6 +89,10 @@ export function cover() {
         height: () => nameBox()?.offsetHeight || 0,
         duration: 0.85,
         ease: 'power2.inOut',
+        onComplete: () => {
+          gsap.set(mask, { height: '100%' });
+          if (ghost) gsap.set(ghost, { opacity: 0 });
+        },
       });
     }
   });
@@ -90,11 +102,13 @@ export function reveal() {
   return new Promise((resolve) => {
     const el = panel();
     const mask = maskEl();
+    const ghost = ghostEl();
     const h = window.innerHeight;
 
     const done = () => {
       if (el) gsap.set(el, { y: h, autoAlpha: 0 });
       if (mask) gsap.set(mask, { height: 0 });
+      if (ghost) gsap.set(ghost, { opacity: 1 });
       if (shell()) shell().style.pointerEvents = 'none';
       showNav();
       busy = false;
@@ -106,6 +120,7 @@ export function reveal() {
 
     gsap.killTweensOf(el);
     if (mask) gsap.killTweensOf(mask);
+    if (ghost) gsap.killTweensOf(ghost);
     gsap.fromTo(
       el,
       { y: 0, autoAlpha: 1 },

@@ -11,6 +11,7 @@ import { sidebarItems } from '../data/nav';
 import { SITE } from '../data/site';
 import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { getLenis } from '../lib/scroll';
 
 const groups = [
   {
@@ -55,7 +56,7 @@ export default function About() {
     const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.about-hero .boundingelem', '.about-hero p'], {
+        gsap.set(['.about-hero .boundingelem', '.about-hero p', '.about-hero .hero-aside'], {
           clearProps: 'all',
           opacity: 1,
           y: 0,
@@ -65,6 +66,7 @@ export default function About() {
 
       gsap.set('.about-hero .boundingelem', { y: '100%', opacity: 0 });
       gsap.set('.about-hero p', { opacity: 0 });
+      gsap.set('.about-hero .hero-aside', { opacity: 0, y: 16 });
 
       const tl = gsap.timeline();
       tl.to('.about-hero .boundingelem', {
@@ -73,11 +75,24 @@ export default function About() {
         duration: 1,
         ease: 'expo.out',
         stagger: 0.08,
-      }).to('.about-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45');
+      })
+        .to('.about-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45')
+        .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5');
     }, wrapRef.current);
 
     return () => ctx.revert();
   }, []);
+
+  function onIndexClick(e) {
+    const href = e.currentTarget.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    const el = document.querySelector(href);
+    if (!el) return;
+    e.preventDefault();
+    const lenis = getLenis();
+    if (lenis) lenis.scrollTo(el, { offset: -80 });
+    else el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   return (
     <div className="about-page" ref={wrapRef}>
@@ -96,16 +111,42 @@ export default function About() {
       </div>
 
       <header className="about-hero">
-        <div className="bounding">
-          <h1 className="boundingelem">About</h1>
+        <div className="hero-main">
+          <div className="bounding">
+            <h1 className="boundingelem">About</h1>
+          </div>
+          <p>
+            Full-stack web and AI — based in {SITE.location}, available for freelance.
+          </p>
         </div>
-        <p>
-          Full-stack web and AI — based in {SITE.location}, available for freelance.
-        </p>
+        <aside className="hero-aside">
+          <p className="aside-kicker">(index)</p>
+          <ol className="hero-index">
+            <li>
+              <a className="yes" href="#education" onClick={onIndexClick}>
+                <span className="idx">01</span>Education
+              </a>
+            </li>
+            <li>
+              <a className="yes" href="#process" onClick={onIndexClick}>
+                <span className="idx">02</span>How I work
+              </a>
+            </li>
+            <li>
+              <a className="yes" href="#scope" onClick={onIndexClick}>
+                <span className="idx">03</span>What I take
+              </a>
+            </li>
+            <li>
+              <a className="yes" href="#stack" onClick={onIndexClick}>
+                <span className="idx">04</span>Stack
+              </a>
+            </li>
+          </ol>
+        </aside>
       </header>
 
       <section className="about-intro js-reveal">
-        <img src="/assets/best.png" alt={SITE.name} />
         <div className="about-copy">
           <h5>(who I am)</h5>
           <p>
@@ -122,7 +163,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="band js-reveal">
+      <section className="band js-reveal" id="education">
         <div className="band-head">
           <h5>(education)</h5>
           <h2>BS Computer Science · 5th semester</h2>
@@ -134,7 +175,7 @@ export default function About() {
         </p>
       </section>
 
-      <section className="band js-reveal">
+      <section className="band js-reveal" id="process">
         <div className="band-head">
           <h5>(how I work)</h5>
           <h2>Short loops. Clear handoff.</h2>
@@ -150,7 +191,7 @@ export default function About() {
         </ol>
       </section>
 
-      <section className="band js-reveal">
+      <section className="band js-reveal" id="scope">
         <div className="band-head">
           <h5>(what I take)</h5>
           <h2>Web products and AI systems.</h2>
@@ -180,7 +221,7 @@ export default function About() {
         </div>
       </section>
 
-      <main className="about-body">
+      <main className="about-body" id="stack">
         {groups.map((g) => (
           <section className="cat js-reveal" key={g.title}>
             <div className="cat-title">
@@ -198,11 +239,19 @@ export default function About() {
         ))}
       </main>
 
-      <section className="about-close js-reveal">
-        <p>Have something in that range?</p>
-        <a className="talk should yes" href="/contact">
-          let&apos;s talk
-        </a>
+      <section className="about-me js-reveal">
+        <img src="/assets/best.png" alt={SITE.name} />
+        <div className="textabout">
+          <h5>(about me)</h5>
+          <p>
+            If you need a full-stack product, a RAG layer, or an agent in a
+            real workflow — that&apos;s the work I take. Islamabad-based, usually
+            easy overlap with EU afternoons and US mornings. Send a short brief.
+          </p>
+          <a className="talk should" href="/contact">
+            let&apos;s talk
+          </a>
+        </div>
       </section>
 
       <Footer />

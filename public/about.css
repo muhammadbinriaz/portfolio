@@ -66,7 +66,11 @@ body {
 }
 
 .about-hero {
-  padding: 10vw 5vw 4vw;
+  padding: 8vw 5vw 6vw;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6vw;
 }
 .about-hero h1 {
   font-size: clamp(56px, 16vw, 160px);
@@ -91,20 +95,52 @@ body {
   font-size: clamp(16px, 1.6vw, 22px);
   line-height: 1.55;
 }
+.about-hero .hero-aside {
+  flex-shrink: 0;
+  min-width: 16em;
+  max-width: 22em;
+  padding-bottom: 0.6em;
+}
+.aside-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 12px;
+  opacity: 0.45;
+  margin-bottom: 1.2vw;
+}
+.hero-index {
+  list-style: none;
+}
+.hero-index a {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1em;
+  padding: 0.9vw 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(16px, 1.25vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.hero-index li:last-child a {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+.hero-index .idx {
+  opacity: 0.35;
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.hero-index a:hover .idx {
+  opacity: 0.7;
+}
 
 .about-intro {
-  display: flex;
-  align-items: flex-start;
-  gap: 80px;
-  padding: 6vw 5vw 8vw;
-}
-.about-intro img {
-  width: 240px;
-  border-radius: 50%;
-  object-fit: cover;
+  padding: 2vw 5vw 8vw;
 }
 .about-copy {
-  max-width: 40rem;
+  max-width: 46rem;
 }
 .about-copy h5 {
   text-transform: uppercase;
@@ -141,6 +177,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4vw;
+  scroll-margin-top: 90px;
 }
 .cat-title {
   display: flex;
@@ -184,9 +221,9 @@ body {
 .band {
   padding: 7vw 5vw;
   border-top: 1px solid rgba(255, 255, 255, 0.14);
+  scroll-margin-top: 90px;
 }
-.band-head h5,
-.about-close h5 {
+.band-head h5 {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   font-size: 13px;
@@ -249,22 +286,38 @@ body {
   font-size: clamp(18px, 1.4vw, 24px);
   margin-bottom: 10px;
 }
-.about-close {
-  padding: 8vw 5vw 10vw;
+.about-me {
+  color: #fff;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  align-items: flex-start;
+  gap: 80px;
+  width: 100%;
+  padding: 10vw 10vw;
+  padding-left: 35vw;
 }
-.about-close p {
-  font-size: clamp(22px, 3.4vw, 48px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  max-width: 12em;
-  line-height: 1.1;
+.about-me img {
+  width: 225px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
-.about-close .talk {
+.about-me .textabout {
+  width: 30rem;
+}
+.about-me .textabout h5 {
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 5px;
+  letter-spacing: 0.7px;
+  font-size: 14px;
+}
+.about-me .textabout p {
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: 550;
+}
+.about-me .talk {
   display: inline-block;
   padding: 7px 22px;
   border: 1px solid #fff;
@@ -272,13 +325,12 @@ body {
   color: #fff;
   text-decoration: none;
   transition: all ease 0.6s;
-  flex-shrink: 0;
 }
-.about-close .talk:hover {
+.about-me .talk:hover {
   color: #000;
   background-color: #fff;
 }
-.about-close .talk:hover::after {
+.about-me .talk:hover::after {
   width: 0;
 }
 
@@ -289,7 +341,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 25px 40px 35px;
+  padding: 25px 5vw 35px;
 }
 .about-page .footerleft {
   display: flex;
@@ -322,8 +374,12 @@ body {
   .about-page .right a {
     font-size: 1.6vw;
   }
+  .about-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5vw;
+  }
   .about-intro {
-    gap: 40px;
     padding: 6vw 5vw;
   }
 }
@@ -339,20 +395,24 @@ body {
   }
   .about-hero {
     padding: 10vw 6vw 8vw;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10vw;
+  }
+  .about-hero .hero-aside {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+  .hero-index a {
+    padding: 3.6vw 0;
+    font-size: 4.6vw;
   }
   .about-intro {
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    padding: 8vw 0;
-  }
-  .about-intro img {
-    width: 60vw;
-    margin: 0 0 6vw 6vw;
-    align-self: flex-start;
+    padding: 8vw 6vw 10vw;
   }
   .about-copy {
-    padding: 4vw 6vw;
+    padding: 0;
     max-width: none;
   }
   .about-copy p {
@@ -371,14 +431,40 @@ body {
     grid-template-columns: 1fr;
     gap: 8vw;
   }
-  .about-close {
+  .about-me {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 12vw 5vw 14vw;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    padding: 5vw 0;
+    padding-left: 0;
+  }
+  .about-me img {
+    width: 60vw;
+    align-self: stretch;
+    margin-bottom: 5vw;
+    margin-left: 5vw;
+  }
+  .about-me .textabout {
+    padding: 3vw 5vw;
+    width: 100%;
+  }
+  .about-me .textabout h5 {
+    font-size: 3.2vw;
+    font-weight: normal;
+  }
+  .about-me .textabout p {
+    font-size: 4.2vw;
+    line-height: 1.7;
+    margin-bottom: 50px;
+  }
+  .about-me .talk {
+    padding: 10px 25px;
+    font-size: 3.6vw;
   }
   .about-page .footer {
     flex-direction: column-reverse;
-    padding: 3vw 5vw 25px;
+    padding: 3vw 6vw 25px;
   }
   .about-page .footerleft {
     width: 100%;

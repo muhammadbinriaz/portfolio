@@ -50,7 +50,7 @@ export default function Contact() {
     const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.contact-hero .boundingelem', '.contact-hero p'], {
+        gsap.set(['.contact-hero .boundingelem', '.contact-hero p', '.contact-hero .hero-aside'], {
           clearProps: 'all',
           opacity: 1,
           y: 0,
@@ -60,6 +60,7 @@ export default function Contact() {
 
       gsap.set('.contact-hero .boundingelem', { y: '100%', opacity: 0 });
       gsap.set('.contact-hero p', { opacity: 0 });
+      gsap.set('.contact-hero .hero-aside', { opacity: 0, y: 16 });
 
       const tl = gsap.timeline();
       tl.to('.contact-hero .boundingelem', {
@@ -68,7 +69,9 @@ export default function Contact() {
         duration: 1,
         ease: 'expo.out',
         stagger: 0.08,
-      }).to('.contact-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45');
+      })
+        .to('.contact-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45')
+        .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5');
     }, wrapRef.current);
 
     return () => ctx.revert();
@@ -100,16 +103,38 @@ export default function Contact() {
       </div>
 
       <header className="contact-hero">
-        <div className="bounding">
-          <h1 className="boundingelem">Let&apos;s</h1>
+        <div className="hero-main">
+          <div className="bounding">
+            <h1 className="boundingelem">Let&apos;s</h1>
+          </div>
+          <div className="bounding">
+            <h1 className="boundingelem">talk</h1>
+          </div>
+          <p>
+            Freelance from {SITE.location} — full-stack web, RAG, and agents.
+            I usually reply within a day.
+          </p>
         </div>
-        <div className="bounding">
-          <h1 className="boundingelem">talk</h1>
-        </div>
-        <p>
-          Freelance from {SITE.location} — full-stack web, RAG, and agents.
-          I usually reply within a day.
-        </p>
+        <aside className="hero-aside">
+          <dl>
+            <div>
+              <dt>(now)</dt>
+              <dd>Open for freelance</dd>
+            </div>
+            <div>
+              <dt>(reply)</dt>
+              <dd>Usually within a day</dd>
+            </div>
+            <div>
+              <dt>(zone)</dt>
+              <dd>{SITE.location} · PKT (UTC+5)</dd>
+            </div>
+            <div>
+              <dt>(best for)</dt>
+              <dd>Scoped builds with a clear owner</dd>
+            </div>
+          </dl>
+        </aside>
       </header>
 
       <div className="contact-body">
