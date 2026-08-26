@@ -112,18 +112,57 @@ html .nav {
 }
 html .nav a,
 html .nav .left a,
-html .nav .home-link {
+html .nav .home-link,
+html .nav .come2 a {
   font-size: 16px !important;
-  font-weight: 600;
+  font-weight: 600 !important;
   letter-spacing: 0.5px;
+  color: #fff !important;
+  text-decoration: none;
 }
 html .nav h4,
 html .nav .come,
 html .nav .middle h4 {
   font-size: 16px !important;
-  font-weight: 600;
+  font-weight: 600 !important;
   letter-spacing: 0.5px;
   margin: 0;
+  color: #fff !important;
+}
+html .footer {
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 36px 35px !important;
+  box-sizing: border-box;
+}
+html .footerleft {
+  display: flex;
+  gap: 20px;
+}
+html .footerleft h5 {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.7px;
+  opacity: 1 !important;
+  margin: 0;
+}
+html .footerright {
+  display: flex;
+  align-items: center;
+  gap: 3.6vw;
+}
+html .footer a,
+html .footerright a {
+  color: #fff !important;
+  text-transform: uppercase;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.7px;
+  text-decoration: none;
 }
 html .hero,
 html .about-page,
@@ -139,9 +178,18 @@ html .contact-page {
   html .nav a,
   html .nav .left a,
   html .nav .home-link,
+  html .nav .come2 a,
   html .nav h4,
   html .nav .come,
   html .nav .middle h4 {
+    font-size: 15px !important;
+  }
+  html .footer {
+    padding: 18px 22px 28px !important;
+  }
+  html .footerleft h5,
+  html .footer a,
+  html .footerright a {
     font-size: 15px !important;
   }
   html .hero,
