@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { gsap } from '../lib/animations';
 import Sidebar from '../components/Sidebar';
@@ -11,6 +11,7 @@ import { sidebarItems } from '../data/nav';
 import { SITE } from '../data/site';
 import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useAfterReveal } from '../hooks/useAfterReveal';
 
 const services = [
   {
@@ -38,7 +39,7 @@ export default function Home({ animate = true }) {
   useSmoothScroll(mainRef);
   useScrollReveal(mainRef);
 
-  useEffect(() => {
+  useAfterReveal(() => {
     if (!gsap || !animate) return;
 
     const reduce = prefersReducedMotion();

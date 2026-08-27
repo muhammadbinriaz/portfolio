@@ -8,12 +8,13 @@
 
 .transition-panel {
   position: absolute;
-  inset: -2px 0;
+  inset: -8px 0;
   background-color: #a3a3a3;
   display: flex;
   align-items: center;
   justify-content: center;
   visibility: hidden;
+  will-change: transform;
 }
 
 .tn {

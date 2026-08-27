@@ -5,9 +5,26 @@ import { resumeLenis } from './scroll';
 const EASE = 'power3.inOut';
 
 let busy = false;
+const revealDoneWaiters = [];
 
 export function isTransitioning() {
   return busy;
+}
+
+/** Resolves when the route cover has fully left (or now if idle). */
+export function whenRevealed() {
+  return new Promise((resolve) => {
+    if (!busy) {
+      resolve();
+      return;
+    }
+    revealDoneWaiters.push(resolve);
+  });
+}
+
+function flushRevealDone() {
+  const pending = revealDoneWaiters.splice(0, revealDoneWaiters.length);
+  pending.forEach((fn) => fn());
 }
 
 function panel() {
@@ -30,10 +47,26 @@ function ghostEl() {
   return document.querySelector('.tn-ghost');
 }
 
+function hideNav() {
+  document.documentElement.classList.add('route-covering');
+  const nav = document.querySelector('.nav');
+  if (nav && gsap) {
+    gsap.killTweensOf(nav);
+    gsap.set(nav, { autoAlpha: 0 });
+  }
+}
+
 function showNav() {
   document.documentElement.classList.remove('route-covering');
   const nav = document.querySelector('.nav');
-  if (nav && gsap) gsap.set(nav, { autoAlpha: 1, yPercent: 0 });
+  if (nav && gsap) {
+    gsap.killTweensOf(nav);
+    gsap.fromTo(
+      nav,
+      { autoAlpha: 0, yPercent: 0 },
+      { autoAlpha: 1, duration: 0.35, ease: 'power2.out', overwrite: true },
+    );
+  }
 }
 
 function snapMenuClosed() {
@@ -66,6 +99,7 @@ export function cover() {
       gsap.set(el, { y: 0, autoAlpha: 1 });
       if (mask) gsap.set(mask, { height: '100%' });
       if (ghost) gsap.set(ghost, { opacity: 0 });
+      hideNav();
       snapMenuClosed();
       return resolve();
     }
@@ -82,7 +116,12 @@ export function cover() {
       y: 0,
       duration: coverDur,
       ease: EASE,
-      onComplete: snapMenuClosed,
+      onComplete: () => {
+        // Nav stays visible while gray rises over it, then hides under
+        // the solid cover so it cannot collide on the way out.
+        hideNav();
+        snapMenuClosed();
+      },
     });
     if (mask) {
       tl.to(mask, {
@@ -112,21 +151,27 @@ export function reveal() {
       if (shell()) shell().style.pointerEvents = 'none';
       showNav();
       busy = false;
+      flushRevealDone();
       resolve();
     };
 
     if (!busy) return done();
     if (!el || !gsap || prefersReducedMotion()) return done();
 
+    // Ensure nav is gone before the panel lifts, so the black bar never
+    // peeks through the trailing edge of the gray cover.
+    hideNav();
+
     gsap.killTweensOf(el);
     if (mask) gsap.killTweensOf(mask);
     if (ghost) gsap.killTweensOf(ghost);
+
     gsap.fromTo(
       el,
       { y: 0, autoAlpha: 1 },
       {
-        y: -h,
-        duration: 0.8,
+        y: -(h + 8),
+        duration: 0.85,
         ease: EASE,
         force3D: true,
         onComplete: done,

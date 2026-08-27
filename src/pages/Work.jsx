@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { gsap } from '../lib/animations';
 import Sidebar from '../components/Sidebar';
@@ -12,6 +12,7 @@ import { SITE } from '../data/site';
 import { projects } from '../data/projects';
 import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useAfterReveal } from '../hooks/useAfterReveal';
 
 function youtubeId(url) {
   if (!url) return null;
@@ -67,7 +68,7 @@ export default function Work() {
   useSmoothScroll(mainRef);
   useScrollReveal(mainRef);
 
-  useEffect(() => {
+  useAfterReveal(() => {
     if (!gsap) return;
 
     const reduce = prefersReducedMotion();
@@ -81,18 +82,20 @@ export default function Work() {
         return;
       }
 
+      gsap.set('.front h1', { y: '105%' });
+      gsap.set(['.left', '.middle', '.come2'], { opacity: 0, y: 12 });
+
       gsap.to('.front h1', {
         y: 0,
-        delay: 0.12,
         duration: 0.9,
         ease: 'expo.out',
       });
       gsap.to(['.left', '.middle', '.come2'], {
         y: 0,
-        delay: 0.18,
         duration: 0.75,
         ease: 'power3.out',
         opacity: 1,
+        delay: 0.06,
       });
     }, mainRef.current);
 

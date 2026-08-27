@@ -91,7 +91,7 @@ body {
 .about-hero p {
   max-width: 22em;
   margin-top: 2vw;
-  opacity: 0.55;
+  opacity: 0;
   font-size: clamp(16px, 1.6vw, 22px);
   line-height: 1.55;
 }
@@ -100,6 +100,19 @@ body {
   min-width: 16em;
   max-width: 22em;
   padding-bottom: 0.6em;
+  opacity: 0;
+  transform: translateY(16px);
+}
+.about-page.is-entered .about-hero .boundingelem {
+  transform: none;
+  opacity: 1;
+}
+.about-page.is-entered .about-hero p {
+  opacity: 0.55;
+}
+.about-page.is-entered .about-hero .hero-aside {
+  opacity: 1;
+  transform: none;
 }
 .aside-kicker {
   text-transform: uppercase;
@@ -664,8 +677,13 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-page .bounding .boundingelem {
+  .about-page .bounding .boundingelem,
+  .about-hero p,
+  .about-hero .hero-aside {
     transform: none;
     opacity: 1;
+  }
+  .about-hero p {
+    opacity: 0.55;
   }
 }

@@ -41,7 +41,7 @@ export default function App() {
     if (!cssReady || !isTransitioning()) return
     const id = window.setTimeout(() => {
       reveal()
-    }, 400)
+    }, 280)
     return () => window.clearTimeout(id)
   }, [cssReady, location.pathname])
 

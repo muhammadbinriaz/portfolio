@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { gsap } from '../lib/animations';
 import Sidebar from '../components/Sidebar';
@@ -11,6 +11,7 @@ import { sidebarItems } from '../data/nav';
 import { SITE } from '../data/site';
 import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useAfterReveal } from '../hooks/useAfterReveal';
 import { getLenis } from '../lib/scroll';
 
 const groups = [
@@ -50,17 +51,17 @@ export default function About() {
   useSmoothScroll(wrapRef);
   useScrollReveal(wrapRef);
 
-  useEffect(() => {
-    if (!gsap) return;
+  useAfterReveal(() => {
+    if (!gsap || !wrapRef.current) return;
 
+    const root = wrapRef.current;
     const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
       if (reduce) {
         gsap.set(['.about-hero .boundingelem', '.about-hero p', '.about-hero .hero-aside'], {
-          clearProps: 'all',
-          opacity: 1,
-          y: 0,
+          clearProps: 'transform,opacity',
         });
+        root.classList.add('is-entered');
         return;
       }
 
@@ -68,7 +69,14 @@ export default function About() {
       gsap.set('.about-hero p', { opacity: 0 });
       gsap.set('.about-hero .hero-aside', { opacity: 0, y: 16 });
 
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({
+        onComplete: () => {
+          root.classList.add('is-entered');
+          gsap.set(['.about-hero .boundingelem', '.about-hero p', '.about-hero .hero-aside'], {
+            clearProps: 'transform,opacity',
+          });
+        },
+      });
       tl.to('.about-hero .boundingelem', {
         y: 0,
         opacity: 1,
@@ -78,9 +86,12 @@ export default function About() {
       })
         .to('.about-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45')
         .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5');
-    }, wrapRef.current);
+    }, root);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      root.classList.remove('is-entered');
+    };
   }, []);
 
   function onIndexClick(e) {
