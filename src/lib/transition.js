@@ -1,6 +1,6 @@
 import { gsap } from './animations';
 import { prefersReducedMotion } from './motion';
-import { resumeLenis } from './scroll';
+import { resumeLenis, resetScroll } from './scroll';
 
 const EASE = 'power3.inOut';
 
@@ -89,6 +89,7 @@ export function cover() {
 
     busy = true;
     if (shell()) shell().style.pointerEvents = 'auto';
+    resetScroll();
 
     const h = window.innerHeight;
     const mask = maskEl();
@@ -149,6 +150,7 @@ export function reveal() {
       if (mask) gsap.set(mask, { height: 0 });
       if (ghost) gsap.set(ghost, { opacity: 1 });
       if (shell()) shell().style.pointerEvents = 'none';
+      resetScroll();
       showNav();
       busy = false;
       flushRevealDone();

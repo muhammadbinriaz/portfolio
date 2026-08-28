@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { gsap, ScrollTrigger, Lenis } from '../lib/animations';
-import { registerLenis } from '../lib/scroll';
+import { registerLenis, resetScroll } from '../lib/scroll';
 
 function attachHideNav(lenis) {
   const nav = document.querySelector('.nav');
@@ -47,19 +47,22 @@ function attachHideNav(lenis) {
 }
 
 export function useSmoothScroll(rootRef) {
+  useLayoutEffect(() => {
+    resetScroll();
+  }, []);
+
   useEffect(() => {
     if (!Lenis) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => 1 - Math.pow(1 - t, 4),
+      duration: 0.95,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       syncTouch: false,
     });
 
     registerLenis(lenis);
-    lenis.scrollTo(0, { immediate: true });
-    window.scrollTo(0, 0);
+    resetScroll();
 
     lenis.on('scroll', ScrollTrigger.update);
     const ticker = (time) => lenis.raf(time * 1000);

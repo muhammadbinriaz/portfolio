@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import About from './pages/About'
@@ -9,6 +9,7 @@ import TransitionOverlay from './components/TransitionOverlay'
 import ErrorBoundary from './components/ErrorBoundary'
 import Cursor from './components/Cursor'
 import { cover, reveal, isTransitioning } from './lib/transition'
+import { resetScroll } from './lib/scroll'
 import { usePageCss } from './hooks/usePageCss'
 import { prefersReducedMotion } from './lib/motion'
 
@@ -22,6 +23,10 @@ export default function App() {
 
   const cssReady = usePageCss(location.pathname)
 
+  useLayoutEffect(() => {
+    resetScroll()
+  }, [location.pathname])
+
   useEffect(() => {
     function onClick(e) {
       const link = e.target.closest('.should')
@@ -31,7 +36,10 @@ export default function App() {
       if (href === window.location.pathname) return
       if (isTransitioning()) return
       e.preventDefault()
-      cover().then(() => navigate(href))
+      cover().then(() => {
+        resetScroll()
+        navigate(href)
+      })
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)

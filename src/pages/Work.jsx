@@ -84,6 +84,8 @@ export default function Work() {
         return;
       }
 
+      const mobile = window.matchMedia('(max-width: 768px)').matches;
+
       gsap.set('.work-hero .boundingelem', { y: '100%', opacity: 0 });
       gsap.set('.work-lead', { opacity: 0, y: 12 });
       gsap.set(['.nav .left', '.nav .middle', '.nav .come2'], { opacity: 0, y: 10 });
@@ -104,16 +106,20 @@ export default function Work() {
       tl.to(['.nav .left', '.nav .middle', '.nav .come2'], {
         y: 0,
         opacity: 1,
-        duration: 0.55,
+        duration: mobile ? 0.5 : 0.55,
         ease: 'power2.out',
         stagger: 0.04,
       })
         .to(
           '.work-hero .boundingelem',
-          { y: 0, opacity: 0.7, duration: 0.8, ease: 'power3.out' },
-          '-=0.2',
+          { y: 0, opacity: 0.7, duration: mobile ? 0.72 : 0.8, ease: 'power3.out' },
+          mobile ? '+=0.05' : '-=0.2',
         )
-        .to('.work-lead', { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.35');
+        .to(
+          '.work-lead',
+          { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' },
+          mobile ? '+=0.06' : '-=0.35',
+        );
     }, root);
 
     return () => {

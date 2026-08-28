@@ -55,9 +55,11 @@ export default function About() {
         return;
       }
 
+      const mobile = window.matchMedia('(max-width: 768px)').matches;
+
       gsap.set('.about-hero .boundingelem', { y: '100%', opacity: 0 });
-      gsap.set('.about-hero p', { opacity: 0 });
-      gsap.set('.about-hero .hero-aside', { opacity: 0, y: 16 });
+      gsap.set('.about-hero p', { opacity: 0, y: mobile ? 10 : 0 });
+      gsap.set('.about-hero .hero-aside', { opacity: 0, y: mobile ? 14 : 16 });
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -70,11 +72,16 @@ export default function About() {
       tl.to('.about-hero .boundingelem', {
         y: 0,
         opacity: 1,
-        duration: 0.85,
+        duration: mobile ? 0.75 : 0.85,
         ease: 'power3.out',
-      })
-        .to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-        .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
+      });
+      if (mobile) {
+        tl.to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' }, '+=0.06')
+          .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '+=0.06');
+      } else {
+        tl.to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+          .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
+      }
     }, root);
 
     return () => {
@@ -234,7 +241,9 @@ export default function About() {
               <ul className="tools-grid">
                 {g.items.map((t) => (
                   <li className="tool" key={t.name}>
-                    <img src={t.icon} alt="" width={28} height={28} loading="lazy" />
+                    <span className="tool-icon">
+                      <img src={t.icon} alt="" width={28} height={28} loading="lazy" />
+                    </span>
                     <span>{t.name}</span>
                   </li>
                 ))}

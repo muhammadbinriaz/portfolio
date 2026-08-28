@@ -35,7 +35,11 @@ export function useSidebarMenu() {
     }
 
     const lock = () => {
-      scrollY = window.scrollY || 0;
+      const lenis = getLenis();
+      scrollY = Math.max(
+        0,
+        Math.round(lenis?.scroll ?? window.scrollY ?? document.documentElement.scrollTop ?? 0),
+      );
       document.documentElement.classList.add('menu-open');
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
@@ -45,16 +49,28 @@ export function useSidebarMenu() {
       pauseLenis();
     };
     const unlock = () => {
+      const y = scrollY;
       document.documentElement.classList.remove('menu-open');
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
       document.body.style.width = '';
+
+      window.scrollTo(0, y);
+
       const lenis = getLenis();
-      if (lenis) lenis.scrollTo(scrollY, { immediate: true });
-      else window.scrollTo(0, scrollY);
-      resumeLenis();
+      if (lenis) {
+        lenis.scrollTo(y, { immediate: true });
+      }
+
+      requestAnimationFrame(() => {
+        window.scrollTo(0, y);
+        if (lenis) {
+          lenis.scrollTo(y, { immediate: true });
+          resumeLenis();
+        }
+      });
     };
 
     const open = (e) => {
