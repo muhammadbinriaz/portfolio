@@ -13,17 +13,7 @@ import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useAfterReveal } from '../hooks/useAfterReveal';
 import { getLenis } from '../lib/scroll';
-
-const groups = [
-  {
-    title: 'Web',
-    items: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
-  },
-  {
-    title: 'AI',
-    items: ['Python', 'FastAPI', 'RAG', 'LangChain', 'Agents'],
-  },
-];
+import { toolGroups } from '../data/tools';
 
 const steps = [
   {
@@ -134,8 +124,8 @@ export default function About() {
           <p className="aside-kicker">(index)</p>
           <ol className="hero-index">
             <li>
-              <a className="yes" href="#education" onClick={onIndexClick}>
-                <span className="idx">01</span>Education
+              <a className="yes" href="#focus" onClick={onIndexClick}>
+                <span className="idx">01</span>Focus
               </a>
             </li>
             <li>
@@ -149,8 +139,8 @@ export default function About() {
               </a>
             </li>
             <li>
-              <a className="yes" href="#stack" onClick={onIndexClick}>
-                <span className="idx">04</span>Stack
+              <a className="yes" href="#tools" onClick={onIndexClick}>
+                <span className="idx">04</span>Tech &amp; tools
               </a>
             </li>
           </ol>
@@ -161,28 +151,28 @@ export default function About() {
         <div className="about-copy">
           <h5>(who I am)</h5>
           <p>
-            I&apos;m {SITE.name}, a fifth-semester Computer Science student. I
-            build web products end to end, and AI features that actually ship —
-            retrieval-augmented systems, tool-using agents, and the APIs they
-            sit on.
+            I&apos;m {SITE.name}, a full-stack and AI engineer based in{' '}
+            {SITE.location}. I build web products end to end, and AI that sits
+            in a real workflow — chat that answers from your files, automated
+            pipelines, and the APIs they sit on.
           </p>
           <p>
-            I&apos;m starting freelance work on Upwork and LinkedIn. If you need
-            a full-stack app, a RAG layer, or an automation pipeline, that&apos;s
-            the work I take.
+            Available for freelance on Upwork and LinkedIn. If you need a
+            full-stack app, AI over your documents, or an automation pipeline,
+            that&apos;s the work I take.
           </p>
         </div>
       </section>
 
-      <section className="band js-reveal" id="education">
+      <section className="band js-reveal" id="focus">
         <div className="band-head">
-          <h5>(education)</h5>
-          <h2>BS Computer Science · 5th semester</h2>
+          <h5>(focus)</h5>
+          <h2>Production systems, not demos.</h2>
         </div>
         <p className="band-copy">
-          Coursework in data structures, databases, and software engineering —
-          applied on real repos, not only assignments. I treat client work the
-          same way I treat a lab: scoped, documented, and demoable.
+          I care about what you can click, deploy, and hand off — clean repos,
+          clear docs, and AI that sits in a real workflow. Scoped builds with a
+          defined outcome beat open-ended experiments.
         </p>
       </section>
 
@@ -216,10 +206,11 @@ export default function About() {
             </p>
           </article>
           <article>
-            <h3>RAG &amp; agents</h3>
+            <h3>AI &amp; automation</h3>
             <p>
-              Answers grounded in your files. Agents that call tools and run
-              pipelines — leads, research, internal ops — instead of a naked chatbot.
+              Chat that answers from your files. Pipelines that pull leads,
+              research, or internal ops — with a human still in control, not a
+              naked chatbot.
             </p>
           </article>
           <article>
@@ -232,32 +223,37 @@ export default function About() {
         </div>
       </section>
 
-      <main className="about-body" id="stack">
-        {groups.map((g) => (
-          <section className="cat js-reveal" key={g.title}>
-            <div className="cat-title">
-              <h2>{g.title}</h2>
-              <span className="count">{String(g.items.length).padStart(2, '0')}</span>
+      <section className="tools-band js-reveal" id="tools">
+        <div className="band-head">
+          <h5>(tech &amp; tools)</h5>
+          <h2>What I build with.</h2>
+        </div>
+        <div className="tools-groups">
+          {toolGroups.map((g) => (
+            <div className="tools-group" key={g.title}>
+              <h3 className="tools-group-title">{g.title}</h3>
+              <ul className="tools-grid">
+                {g.items.map((t) => (
+                  <li className="tool" key={t.name}>
+                    <img src={t.icon} alt="" width={28} height={28} loading="lazy" />
+                    <span>{t.name}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="cat-grid">
-              {g.items.map((n) => (
-                <div className="tech" key={n}>
-                  <span>{n}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </main>
+          ))}
+        </div>
+      </section>
 
       <section className="about-me js-reveal">
         <img src="/assets/best.png" alt={SITE.name} />
         <div className="textabout">
           <h5>(about me)</h5>
           <p>
-            If you need a full-stack product, a RAG layer, or an agent in a
-            real workflow — that&apos;s the work I take. Islamabad-based, usually
-            easy overlap with EU afternoons and US mornings. Send a short brief.
+            If you need a full-stack product, AI over your documents, or
+            automation in a real workflow — that&apos;s the work I take.
+            Islamabad-based, usually easy overlap with EU afternoons and US
+            mornings. Send a short brief.
           </p>
           <a className="talk should" href="/contact">
             let&apos;s talk

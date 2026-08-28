@@ -22,7 +22,7 @@ export default function Sidebar({ lowerClass = 'lower', items = [] }) {
         </div>
       </div>
       <div className="daba">
-        <p className="menu-tag">Full-stack · RAG · Agents</p>
+        <p className="menu-tag">Full-stack · AI · Automation</p>
         <div className="acc">
           {MENU_SOCIALS.map((s) => (
             <a

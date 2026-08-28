@@ -16,18 +16,23 @@ import { useAfterReveal } from '../hooks/useAfterReveal';
 const services = [
   {
     title: 'Full Stack Web',
-    tag: 'Apps & APIs',
-    img: '/assets/rct1.png',
+    tag: 'Apps & interfaces',
+    img: '/assets/Nextjs1.jpeg',
   },
   {
-    title: 'AI systems (RAG)',
-    tag: 'Grounded answers',
-    img: '/assets/langchain-color1.png',
+    title: 'Production AI',
+    tag: 'Automation & models',
+    img: '/assets/python.webp',
   },
   {
-    title: 'Agentic AI',
-    tag: 'Pipelines & tools',
-    img: '/assets/tech/agentic.svg',
+    title: 'Backend & APIs',
+    tag: 'Services & data',
+    img: '/assets/nodejs_logo.png',
+  },
+  {
+    title: 'DevOps & deploy',
+    tag: 'Docker · CI/CD · cloud',
+    img: '/assets/docker.png',
   },
 ];
 
@@ -174,7 +179,7 @@ export default function Home({ animate = true }) {
               </h5>
             </div>
             <div className="bounding">
-              <h5 className="boundingelemUp">BS CS · 5th semester</h5>
+              <h5 className="boundingelemUp">Full-stack · AI · Automation</h5>
             </div>
           </div>
           <div className="herofooter">
@@ -224,9 +229,9 @@ export default function Home({ animate = true }) {
           <div className="textabout">
             <h5>(about me)</h5>
             <p>
-              I&apos;m a full-stack developer in Islamabad building web products
-              and AI systems — RAG, agents, and the APIs behind them. Fifth
-              semester CS, taking on freelance work.
+              I&apos;m a full-stack and AI engineer in Islamabad. I ship web
+              products and production AI — chat over your documents, automated
+              workflows, and the APIs behind them. Open for freelance.
             </p>
             <a className="talk should" href="/about">
               more about me

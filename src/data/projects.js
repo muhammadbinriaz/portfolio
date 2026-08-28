@@ -13,12 +13,12 @@ export const projects = [
     poster: '',
   },
   {
-    id: 'rag',
-    title: 'RAG System',
+    id: 'docs-chat',
+    title: 'Document Q&A',
     year: '2025',
     blurb:
-      'Answers grounded in your documents. Retrieval, embeddings, and a chat layer that cites what it used.',
-    tags: ['Python', 'LangChain', 'RAG'],
+      'Chat that answers from your files and points back to the source — built for a real workflow, not a demo.',
+    tags: ['Python', 'LangChain', 'Chat'],
     github: '',
     video: '',
     poster: '',

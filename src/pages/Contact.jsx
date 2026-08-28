@@ -19,11 +19,11 @@ const offers = [
     body: 'A product you can log into — React or Next, a Node or Python API, Postgres. Built to be handed off, not just demoed.',
   },
   {
-    title: 'RAG systems',
-    body: 'Chat that answers from your documents. Retrieval, embeddings, citations. Useful inside a real workflow, not a toy.',
+    title: 'AI on your documents',
+    body: 'Chat that answers from your files and shows where the answer came from. Useful inside a real workflow, not a toy.',
   },
   {
-    title: 'Agents & pipelines',
+    title: 'Automation pipelines',
     body: 'Lead routing, research loops, internal tools that call APIs and write back. Automation with a human still in control.',
   },
 ];
@@ -122,8 +122,8 @@ export default function Contact() {
             <h1 className="boundingelem">talk</h1>
           </div>
           <p>
-            Freelance from {SITE.location} — full-stack web, RAG, and agents.
-            I usually reply within a day.
+            Freelance from {SITE.location} — full-stack web, AI on your
+            documents, and automation. I usually reply within a day.
           </p>
         </div>
         <aside className="hero-aside">
@@ -224,9 +224,9 @@ export default function Contact() {
         <section className="contact-note js-reveal">
           <h5>(availability)</h5>
           <p>
-            Open for freelance alongside studies. Best fit: a scoped build with
-            a clear owner on your side. Timezone PKT (UTC+5) — overlap with EU
-            afternoons and US mornings is usually easy.
+            Open for freelance. Best fit: a scoped build with a clear owner on
+            your side. Timezone PKT (UTC+5) — overlap with EU afternoons and US
+            mornings is usually easy.
           </p>
         </section>
       </div>
