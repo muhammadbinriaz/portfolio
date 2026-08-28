@@ -72,12 +72,12 @@ export default function About() {
       tl.to('.about-hero .boundingelem', {
         y: 0,
         opacity: 1,
-        duration: mobile ? 0.75 : 0.85,
+        duration: mobile ? 0.52 : 0.85,
         ease: 'power3.out',
       });
       if (mobile) {
-        tl.to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' }, '+=0.06')
-          .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '+=0.06');
+        tl.to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.32, ease: 'power2.out' }, '-=0.2')
+          .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, '-=0.26');
       } else {
         tl.to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
           .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');

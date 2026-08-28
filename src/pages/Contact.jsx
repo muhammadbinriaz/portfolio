@@ -59,9 +59,11 @@ export default function Contact() {
         return;
       }
 
+      const mobile = window.matchMedia('(max-width: 768px)').matches;
+
       gsap.set('.contact-hero .boundingelem', { y: '100%', opacity: 0 });
-      gsap.set('.contact-hero p', { opacity: 0 });
-      gsap.set('.contact-hero .hero-aside', { opacity: 0, y: 16 });
+      gsap.set('.contact-hero p', { opacity: 0, y: mobile ? 10 : 0 });
+      gsap.set('.contact-hero .hero-aside', { opacity: 0, y: mobile ? 14 : 16 });
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -74,11 +76,16 @@ export default function Contact() {
       tl.to('.contact-hero .boundingelem', {
         y: 0,
         opacity: 1,
-        duration: 0.85,
+        duration: mobile ? 0.52 : 0.85,
         ease: 'power3.out',
-      })
-        .to('.contact-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
-        .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
+      });
+      if (mobile) {
+        tl.to('.contact-hero p', { opacity: 0.55, y: 0, duration: 0.32, ease: 'power2.out' }, '-=0.2')
+          .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, '-=0.26');
+      } else {
+        tl.to('.contact-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+          .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
+      }
     }, root);
 
     return () => {

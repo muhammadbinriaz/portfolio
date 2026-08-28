@@ -60,7 +60,7 @@ export function useScrollReveal(rootRef) {
               {
                 opacity: 1,
                 y: 0,
-                duration: mobile ? 0.65 : 0.85,
+                duration: mobile ? 0.48 : 0.85,
                 ease: 'power2.out',
                 scrollTrigger: {
                   trigger: el,

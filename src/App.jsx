@@ -47,9 +47,10 @@ export default function App() {
 
   useEffect(() => {
     if (!cssReady || !isTransitioning()) return
+    const delay = window.matchMedia('(max-width: 768px)').matches ? 80 : 280
     const id = window.setTimeout(() => {
       reveal()
-    }, 280)
+    }, delay)
     return () => window.clearTimeout(id)
   }, [cssReady, location.pathname])
 

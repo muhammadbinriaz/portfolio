@@ -106,19 +106,19 @@ export default function Work() {
       tl.to(['.nav .left', '.nav .middle', '.nav .come2'], {
         y: 0,
         opacity: 1,
-        duration: mobile ? 0.5 : 0.55,
+        duration: mobile ? 0.38 : 0.55,
         ease: 'power2.out',
-        stagger: 0.04,
+        stagger: mobile ? 0.03 : 0.04,
       })
         .to(
           '.work-hero .boundingelem',
-          { y: 0, opacity: 0.7, duration: mobile ? 0.72 : 0.8, ease: 'power3.out' },
-          mobile ? '+=0.05' : '-=0.2',
+          { y: 0, opacity: 0.7, duration: mobile ? 0.52 : 0.8, ease: 'power3.out' },
+          mobile ? '-=0.18' : '-=0.2',
         )
         .to(
           '.work-lead',
-          { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' },
-          mobile ? '+=0.06' : '-=0.35',
+          { opacity: 0.55, y: 0, duration: mobile ? 0.32 : 0.45, ease: 'power2.out' },
+          mobile ? '-=0.28' : '-=0.35',
         );
     }, root);
 

@@ -64,7 +64,7 @@ function showNav() {
     gsap.fromTo(
       nav,
       { autoAlpha: 0, yPercent: 0 },
-      { autoAlpha: 1, duration: 0.35, ease: 'power2.out', overwrite: true },
+      { autoAlpha: 1, duration: isMobile() ? 0.22 : 0.35, ease: 'power2.out', overwrite: true },
     );
   }
 }
@@ -94,7 +94,7 @@ export function cover() {
     const h = window.innerHeight;
     const mask = maskEl();
     const ghost = ghostEl();
-    const coverDur = isMobile() ? 1.4 : 0.9;
+    const coverDur = isMobile() ? 1.12 : 0.78;
 
     if (!gsap || prefersReducedMotion()) {
       gsap.set(el, { y: 0, autoAlpha: 1 });
@@ -127,7 +127,7 @@ export function cover() {
     if (mask) {
       tl.to(mask, {
         height: () => nameBox()?.offsetHeight || 0,
-        duration: 0.85,
+        duration: isMobile() ? 0.68 : 0.75,
         ease: 'power2.inOut',
         onComplete: () => {
           gsap.set(mask, { height: '100%' });
@@ -173,7 +173,7 @@ export function reveal() {
       { y: 0, autoAlpha: 1 },
       {
         y: -(h + 8),
-        duration: 0.85,
+        duration: isMobile() ? 0.62 : 0.85,
         ease: EASE,
         force3D: true,
         onComplete: done,
