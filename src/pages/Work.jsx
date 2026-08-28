@@ -69,42 +69,62 @@ export default function Work() {
   useScrollReveal(mainRef);
 
   useAfterReveal(() => {
-    if (!gsap) return;
+    if (!gsap || !mainRef.current) return;
 
+    const root = mainRef.current;
     const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.front h1', '.left', '.middle', '.come2'], {
+        gsap.set(['.work-hero .boundingelem', '.work-lead', '.left', '.middle', '.come2'], {
           clearProps: 'all',
           opacity: 1,
           y: 0,
         });
+        root.classList.add('is-entered');
         return;
       }
 
-      gsap.set('.front h1', { y: '105%' });
-      gsap.set(['.left', '.middle', '.come2'], { opacity: 0, y: 12 });
+      gsap.set('.work-hero .boundingelem', { y: '100%', opacity: 0 });
+      gsap.set('.work-lead', { opacity: 0, y: 12 });
+      gsap.set(['.nav .left', '.nav .middle', '.nav .come2'], { opacity: 0, y: 10 });
 
-      gsap.to('.front h1', {
-        y: 0,
-        duration: 0.9,
-        ease: 'expo.out',
+      const tl = gsap.timeline({
+        onComplete: () => {
+          root.classList.add('is-entered');
+          gsap.set(['.work-hero .boundingelem', '.work-lead'], {
+            clearProps: 'transform,opacity',
+          });
+          gsap.set(['.nav .left', '.nav .middle', '.nav .come2'], {
+            clearProps: 'transform',
+            opacity: 1,
+          });
+        },
       });
-      gsap.to(['.left', '.middle', '.come2'], {
+
+      tl.to(['.nav .left', '.nav .middle', '.nav .come2'], {
         y: 0,
-        duration: 0.75,
-        ease: 'power3.out',
         opacity: 1,
-        delay: 0.06,
-      });
-    }, mainRef.current);
+        duration: 0.55,
+        ease: 'power2.out',
+        stagger: 0.04,
+      })
+        .to(
+          '.work-hero .boundingelem',
+          { y: 0, opacity: 0.7, duration: 0.8, ease: 'power3.out' },
+          '-=0.2',
+        )
+        .to('.work-lead', { opacity: 0.55, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.35');
+    }, root);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      root.classList.remove('is-entered');
+    };
   }, []);
 
   return (
     <>
-      <div className="main" ref={mainRef}>
+      <div className="main work-page" ref={mainRef}>
         <Sidebar lowerClass="lower1" items={sidebarItems(location.pathname)} />
 
         <div className="hero">
@@ -120,8 +140,10 @@ export default function Work() {
             <DesktopNav pathname={location.pathname} className="come2 right" />
           </div>
           <div className="hero-cont">
-            <div className="front">
-              <h1 className="giver">work</h1>
+            <div className="front work-hero">
+              <div className="bounding">
+                <h1 className="boundingelem">work</h1>
+              </div>
               <p className="work-lead">
                 Selected builds — GitHub now, demo videos as they land.
               </p>

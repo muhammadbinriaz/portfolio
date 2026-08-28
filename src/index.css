@@ -37,9 +37,26 @@ html .minicircle {
   mix-blend-mode: difference;
   pointer-events: none;
   will-change: transform;
-  /* Smooths the dot between mousemove events (same feel as the home page).
-     Without it, non-home pages snapped per event and felt jerky/"throttly". */
-  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, width 0.25s ease, height 0.25s ease,
+    margin 0.25s ease, mix-blend-mode 0.2s ease;
+}
+html .minicircle.is-view {
+  width: 72px;
+  height: 72px;
+  margin: -36px 0 0 -36px;
+  mix-blend-mode: normal;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease;
+}
+html .minicircle.is-view::after {
+  content: 'VIEW';
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #000;
 }
 /* No custom cursor on touch devices. */
 @media (hover: none), (pointer: coarse) {
@@ -199,8 +216,44 @@ html .contact-page {
   }
   html .hero,
   html .about-page,
-  html .contact-page {
+  html .contact-page,
+  html .work-page {
     padding-top: 68px;
+  }
+
+  html .about-hero,
+  html .contact-hero,
+  html .work-hero {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+
+  html .full {
+    color: #fff !important;
+    background-color: #121212 !important;
+    opacity: 1 !important;
+  }
+  html .full .naver {
+    border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+  }
+  html .full .naver h4,
+  html .full .naver .cross,
+  html .full .naver .cross span {
+    color: #fff !important;
+  }
+  html .full .content-div a {
+    color: #fff !important;
+  }
+  html .full .menu-tag {
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+  html .full .acc a,
+  html .full .acc h3,
+  html .full .daba h3 {
+    color: #fff !important;
+  }
+  html .full .acc {
+    border-bottom-color: rgba(255, 255, 255, 0.18) !important;
   }
 }
 
@@ -234,7 +287,7 @@ html .contact-page {
     letter-spacing: -0.04em;
     text-transform: uppercase;
     text-decoration: none;
-    color: #000;
+    color: #fff;
   }
   html .full .content-div a.is-current {
     opacity: 0.35;
@@ -253,7 +306,6 @@ html .contact-page {
     font-weight: 700;
     opacity: 0.55;
     margin-bottom: 18px;
-    color: #000;
   }
 }
 img {

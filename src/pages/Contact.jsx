@@ -74,12 +74,11 @@ export default function Contact() {
       tl.to('.contact-hero .boundingelem', {
         y: 0,
         opacity: 1,
-        duration: 1,
-        ease: 'expo.out',
-        stagger: 0.08,
+        duration: 0.85,
+        ease: 'power3.out',
       })
-        .to('.contact-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45')
-        .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5');
+        .to('.contact-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+        .to('.contact-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
     }, root);
 
     return () => {
@@ -116,10 +115,7 @@ export default function Contact() {
       <header className="contact-hero">
         <div className="hero-main">
           <div className="bounding">
-            <h1 className="boundingelem">Let&apos;s</h1>
-          </div>
-          <div className="bounding">
-            <h1 className="boundingelem">talk</h1>
+            <h1 className="boundingelem">Let&apos;s talk</h1>
           </div>
           <p>
             Freelance from {SITE.location} — full-stack web, AI on your

@@ -1,22 +1,16 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import { gsap } from '../lib/animations';
+import { SITE } from '../data/site';
 
 export default function TransitionOverlay() {
-  const [label, setLabel] = useState('Muhammad Bin Riaz');
-
   useLayoutEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const apply = () => setLabel(mq.matches ? 'Muhammad' : 'Muhammad Bin Riaz');
-    apply();
-    mq.addEventListener('change', apply);
-
     const el = document.querySelector('.transition-panel');
     if (el && gsap) {
       gsap.set(el, { y: window.innerHeight, autoAlpha: 0 });
     }
-
-    return () => mq.removeEventListener('change', apply);
   }, []);
+
+  const label = SITE.name;
 
   return (
     <div className="transition" aria-hidden="true">

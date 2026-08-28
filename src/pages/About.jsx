@@ -70,12 +70,11 @@ export default function About() {
       tl.to('.about-hero .boundingelem', {
         y: 0,
         opacity: 1,
-        duration: 1,
-        ease: 'expo.out',
-        stagger: 0.08,
+        duration: 0.85,
+        ease: 'power3.out',
       })
-        .to('.about-hero p', { opacity: 0.55, duration: 0.55, ease: 'power2.out' }, '-=0.45')
-        .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5');
+        .to('.about-hero p', { opacity: 0.55, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3')
+        .to('.about-hero .hero-aside', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.42');
     }, root);
 
     return () => {

@@ -405,10 +405,10 @@ body {
     font-size: 4vw;
   }
   .about-hero {
-    padding: 10vw 6vw 8vw;
+    padding: 10vw 22px 8vw;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10vw;
+    gap: 8vw;
   }
   .about-hero .hero-aside {
     width: 100%;
@@ -431,31 +431,40 @@ body {
     line-height: 1.8;
   }
   .tools-band {
-    padding: 14vw 6vw;
+    padding: 12vw 22px;
   }
   .tools-groups {
-    gap: 10vw;
-    margin-top: 8vw;
+    gap: 8vw;
+    margin-top: 6vw;
   }
   .tools-group-title {
-    margin-bottom: 4vw;
+    margin-bottom: 3vw;
   }
   .tools-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 5vw 3vw;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 10px;
   }
   .tool {
-    gap: 3vw;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
   }
   .tool img {
-    width: 6.5vw;
-    height: 6.5vw;
+    width: 24px;
+    height: 24px;
   }
   .tool span {
-    font-size: 3.4vw;
+    font-size: 10px;
+    line-height: 1.25;
+    white-space: normal;
+    opacity: 0.75;
   }
   .band {
-    padding: 14vw 6vw;
+    padding: 12vw 22px;
+  }
+  .about-intro {
+    padding: 8vw 22px 10vw;
   }
   .steps,
   .take-grid {
@@ -546,15 +555,15 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #000;
-    background-color: #a3a3a3;
+    color: #fff;
+    background-color: #000;
     padding: 0 1vw;
   }
   .naver {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid #cec6c6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     margin: 6.5vw 4vw;
     padding-bottom: 5.8vw;
   }
@@ -578,7 +587,7 @@ body {
   }
   .content-div a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
   }
   .daba {
     display: flex;
@@ -599,12 +608,12 @@ body {
     gap: 14px;
   }
   .acc a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
   }
   .acc h3 {
     font-size: 3.8vw !important;
-    color: #000;
+    color: #fff;
     font-weight: bold;
   }
   .lower {
@@ -623,14 +632,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #000;
-    background-color: #a3a3a3;
+    color: #fff;
+    background-color: #000;
   }
   .naver {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid #cec6c6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     margin: 3.75vw 2.4vw;
     padding-bottom: 3.8vw;
   }
@@ -654,7 +663,7 @@ body {
   }
   .content-div a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
   }
   .daba {
     display: flex;
@@ -674,13 +683,13 @@ body {
     gap: 14px;
   }
   .acc a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
   }
   .acc h3 {
     font-size: 2.2vw;
     font-weight: bold;
-    color: #000;
+    color: #fff;
   }
   .lower {
     display: flex;

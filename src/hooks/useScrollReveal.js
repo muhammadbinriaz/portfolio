@@ -22,19 +22,21 @@ export function useScrollReveal(rootRef) {
         return;
       }
 
+      const mobile = window.matchMedia('(max-width: 768px)').matches;
+
       ctx = gsap.context(() => {
         gsap.utils.toArray(els).forEach((el) => {
           gsap.fromTo(
             el,
-            { opacity: 0, y: 36 },
+            { opacity: 0, y: mobile ? 16 : 28 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.95,
-              ease: 'power3.out',
+              duration: mobile ? 0.65 : 0.85,
+              ease: 'power2.out',
               scrollTrigger: {
                 trigger: el,
-                start: 'top 88%',
+                start: mobile ? 'top 92%' : 'top 88%',
                 toggleActions: 'play none none none',
               },
             },

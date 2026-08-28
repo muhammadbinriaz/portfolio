@@ -99,17 +99,23 @@ img {
   padding-right: 20px;
 }
 
-.front h1 {
+.work-hero .boundingelem {
   font-size: 10vw;
   text-transform: uppercase;
   opacity: 0.7;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
 }
 .work-lead {
   max-width: 16rem;
-  opacity: 0.55;
+  opacity: 0;
   font-size: 15px;
   line-height: 1.5;
   font-weight: 500;
+}
+.work-page.is-entered .work-lead {
+  opacity: 0.55;
 }
 
 .front button {
@@ -225,29 +231,25 @@ img {
   }
   .hero-cont {
     width: 100%;
-    /* background-color: #1d1d1d; */
-    padding: 0vw 5vw;
+    padding: 0 22px;
   }
 
   .front {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10vw;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 6vw;
     margin-bottom: 10vw;
     padding-right: 0;
   }
 
-  .front h1 {
-    font-size: 13vw;
+  .work-hero .boundingelem {
+    font-size: clamp(56px, 16vw, 120px);
+    line-height: 0.9;
     text-transform: uppercase;
-    opacity: 0.7;
-    letter-spacing: 0.75px;
-  }
-  .front {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
   }
   .work-lead {
     max-width: 100%;
@@ -704,10 +706,9 @@ img {
     height: 100svh !important;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: space-between;
-    color: #000 !important;
-    background-color: #a3a3a3;
+    color: #fff !important;
+    background-color: #000;
     padding: 0vw 1vw;
     z-index: 100000;
   }
@@ -716,23 +717,23 @@ img {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid #cec6c6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     margin: 6.5vw 4vw;
     padding-bottom: 5.8vw;
     font-size: 4vw;
-    color: #000;
+    color: #fff;
   }
 
   .naver h4 {
     font-size: 4.5vw;
     font-weight: bold;
-    color: #000;
+    color: #fff;
   }
   .naver .cross {
     font-size: 4.5vw;
     font-weight: bold;
     cursor: pointer;
-    color: #000;
+    color: #fff;
   }
   .middle h4 {
     cursor: pointer;
@@ -829,8 +830,8 @@ img {
     flex-direction: column;
     /* align-items: center; */
     justify-content: space-between;
-    color: #000;
-    background-color: #a3a3a3;
+    color: #fff;
+    background-color: #000;
     /* padding: 4vw 5vw; */
     z-index: 100000;
   }
@@ -963,7 +964,7 @@ img {
     display: none !important;
   }
   .cross span {
-    color: #000 !important;
+    color: #fff !important;
   }
 }
 
@@ -972,18 +973,35 @@ img {
   overflow: hidden;
 }
 
-.front h1 {
-  transform: translateY(105%);
+.work-page .bounding {
+  width: fit-content;
+  overflow: hidden;
+}
+.work-page .bounding .boundingelem {
+  transform: translateY(100%);
+  opacity: 0;
+}
+.work-page.is-entered .work-hero .boundingelem {
+  transform: none;
+  opacity: 0.7;
+}
+.work-page.is-entered .work-lead {
+  opacity: 0.55;
 }
 
 .nav {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-.middle,
-.left,
-.come2 {
+.work-page:not(.is-entered) .nav .left,
+.work-page:not(.is-entered) .nav .middle,
+.work-page:not(.is-entered) .nav .come2 {
   opacity: 0;
+}
+.work-page.is-entered .nav .left,
+.work-page.is-entered .nav .middle,
+.work-page.is-entered .nav .come2 {
+  opacity: 1;
 }
 
 .project-media {
@@ -1078,8 +1096,10 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .front h1 {
+  .work-hero .boundingelem,
+  .work-lead {
     transform: none;
+    opacity: 1;
   }
   .middle,
   .left,

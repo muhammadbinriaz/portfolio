@@ -370,10 +370,10 @@ body {
     font-size: 4vw;
   }
   .contact-hero {
-    padding: 10vw 6vw 8vw;
+    padding: 10vw 22px 8vw;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10vw;
+    gap: 8vw;
   }
   .contact-hero .hero-aside {
     width: 100%;
@@ -383,7 +383,7 @@ body {
     gap: 5vw;
   }
   .contact-body {
-    padding: 6vw 6vw 16vw;
+    padding: 6vw 22px 16vw;
     gap: 14vw;
   }
   .offer-grid,
@@ -447,15 +447,15 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #000;
-    background-color: #a3a3a3;
+    color: #fff;
+    background-color: #000;
     padding: 0 1vw;
   }
   .naver {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid #cec6c6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     margin: 6.5vw 4vw;
     padding-bottom: 5.8vw;
   }
@@ -523,14 +523,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #000;
-    background-color: #a3a3a3;
+    color: #fff;
+    background-color: #000;
   }
   .naver {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid #cec6c6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
     margin: 3.75vw 2.4vw;
     padding-bottom: 3.8vw;
   }

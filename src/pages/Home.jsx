@@ -12,26 +12,32 @@ import { SITE } from '../data/site';
 import { prefersReducedMotion } from '../lib/motion';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useAfterReveal } from '../hooks/useAfterReveal';
+import { useFeaturedHover } from '../hooks/useFeaturedHover';
+import { ScrollTrigger } from '../lib/animations';
 
-const services = [
+const featured = [
   {
     title: 'Full Stack Web',
-    tag: 'Apps & interfaces',
+    meta: 'Apps & interfaces',
+    year: '2025',
     img: '/assets/Nextjs1.jpeg',
   },
   {
     title: 'Production AI',
-    tag: 'Automation & models',
+    meta: 'Automation & models',
+    year: '2025',
     img: '/assets/python.webp',
   },
   {
     title: 'Backend & APIs',
-    tag: 'Services & data',
+    meta: 'Services & data',
+    year: '2025',
     img: '/assets/nodejs_logo.png',
   },
   {
     title: 'DevOps & deploy',
-    tag: 'Docker · CI/CD · cloud',
+    meta: 'Docker · CI/CD · cloud',
+    year: '2025',
     img: '/assets/docker.png',
   },
 ];
@@ -43,6 +49,7 @@ export default function Home({ animate = true }) {
   useLiveTime();
   useSmoothScroll(mainRef);
   useScrollReveal(mainRef);
+  useFeaturedHover(mainRef);
 
   useAfterReveal(() => {
     if (!gsap || !animate) return;
@@ -102,37 +109,17 @@ export default function Home({ animate = true }) {
           '-=0.35',
         );
 
-      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        document.querySelectorAll('.elem').forEach((elem) => {
-          const img = elem.querySelector('img');
-          if (!img) return;
-          gsap.set(img, { xPercent: -50, yPercent: -50, top: 0, left: 0 });
-          const xTo = gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3' });
-          const yTo = gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3' });
-          let rotate = 0;
-
-          const setPos = (e) => {
-            const rect = elem.getBoundingClientRect();
-            xTo(e.clientX - rect.left);
-            yTo(e.clientY - rect.top);
-            const diffrot = e.clientX - rotate;
-            rotate = e.clientX;
-            gsap.to(img, {
-              rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),
-              duration: 0.45,
-              overwrite: 'auto',
-            });
-          };
-
-          elem.addEventListener('mouseenter', (e) => {
-            gsap.set(img, { zIndex: 99999, display: 'block' });
-            gsap.to(img, { opacity: 1, borderRadius: '20px', duration: 0.25, overwrite: 'auto' });
-            setPos(e);
-          });
-          elem.addEventListener('mousemove', setPos);
-          elem.addEventListener('mouseleave', () => {
-            gsap.to(img, { opacity: 0, ease: 'power3', duration: 0.35 });
-          });
+      if (!reduce && ScrollTrigger) {
+        gsap.from('.featured-band', {
+          y: 72,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.featured-band',
+            start: 'top 82%',
+            toggleActions: 'play none none none',
+          },
         });
       }
     }, mainRef.current);
@@ -207,22 +194,32 @@ export default function Home({ animate = true }) {
           </div>
         </div>
 
-        <div className="second">
-          {services.map((s, i) => (
+        <section className="second featured-band">
+          {featured.map((item, i) => (
             <div
               className={
-                i === services.length - 1
-                  ? 'elem elemlast js-reveal'
-                  : 'elem js-reveal'
+                i === 0
+                  ? 'elem elem-first'
+                  : i === featured.length - 1
+                    ? 'elem elemlast'
+                    : 'elem'
               }
-              key={s.title}
+              key={item.title}
             >
-              <img src={s.img} alt="" />
-              <h1>{s.title}</h1>
-              <h5>{s.tag}</h5>
+              <img src={item.img} alt="" />
+              <h1>{item.title}</h1>
+              <div className="elem-meta">
+                <span className="elem-tag">{item.meta}</span>
+                <span className="elem-year">{item.year}</span>
+              </div>
             </div>
           ))}
-        </div>
+          <div className="featured-cta">
+            <a className="featured-btn should" href="/work">
+              View all work
+            </a>
+          </div>
+        </section>
 
         <div className="about js-reveal">
           <img src="/assets/best.png" alt={SITE.name} />
@@ -237,16 +234,6 @@ export default function Home({ animate = true }) {
               more about me
             </a>
           </div>
-        </div>
-
-        <div className="subscribe js-reveal">
-          <h5>Selected work</h5>
-          <h3>
-            <a className="should yes" href="/work">
-              See projects
-              <i className="ri-arrow-right-up-line"></i>
-            </a>
-          </h3>
         </div>
 
         <Footer />
