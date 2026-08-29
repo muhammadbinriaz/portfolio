@@ -1,6 +1,6 @@
 import { gsap } from './animations';
 import { prefersReducedMotion } from './motion';
-import { resumeLenis, resetScroll } from './scroll';
+import { pauseLenis, resumeLenis, resetScroll } from './scroll';
 
 const EASE = 'power3.inOut';
 
@@ -89,7 +89,7 @@ export function cover() {
 
     busy = true;
     if (shell()) shell().style.pointerEvents = 'auto';
-    resetScroll();
+    pauseLenis();
 
     const h = window.innerHeight;
     const mask = maskEl();
@@ -102,6 +102,7 @@ export function cover() {
       if (ghost) gsap.set(ghost, { opacity: 0 });
       hideNav();
       snapMenuClosed();
+      resetScroll();
       return resolve();
     }
 
@@ -112,7 +113,12 @@ export function cover() {
     if (mask) gsap.set(mask, { height: 0 });
     if (ghost) gsap.set(ghost, { opacity: 1 });
 
-    const tl = gsap.timeline({ onComplete: resolve });
+    const tl = gsap.timeline({
+      onComplete: () => {
+        resetScroll();
+        resolve();
+      },
+    });
     tl.to(el, {
       y: 0,
       duration: coverDur,

@@ -36,10 +36,7 @@ export default function App() {
       if (href === window.location.pathname) return
       if (isTransitioning()) return
       e.preventDefault()
-      cover().then(() => {
-        resetScroll()
-        navigate(href)
-      })
+      cover().then(() => navigate(href))
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)
