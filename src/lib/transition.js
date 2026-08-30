@@ -179,7 +179,7 @@ export function reveal() {
       { y: 0, autoAlpha: 1 },
       {
         y: -(h + 8),
-        duration: isMobile() ? 0.62 : 0.85,
+        duration: isMobile() ? 1.0 : 0.85,
         ease: EASE,
         force3D: true,
         onComplete: done,
